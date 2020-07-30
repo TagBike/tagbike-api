@@ -29,8 +29,7 @@ class AuthController extends Controller
             ]);
     
             if(!$token) {
-                $array['error'] = 'E-mail e/ou Senha inválidos';
-                return $array; 
+                return response()->json("E-mail e/ou Senha inválidos"); 
             }
     
             $array['token'] = $token;
@@ -55,48 +54,83 @@ class AuthController extends Controller
     }
 
     public function create(Request $request) {
-        $array = ['error' => ''];
 
         $name = $request->input('name');
         $email = $request->input('email');
         $password  = $request->input('password');
+        $uf = $request->input('uf');
+        $city = $request->input('city');
+        $cellphone = $request->input('cellphone');
+        $cpf = $request->input('cpf');
+        $birthday = $request->input('birthday');
+        $sexy = $request->input('sexy');
 
-        if ($name && $email && $password) {
+        $emailExists = User::where('email', $email)->count();
 
-            $emailExists = User::where('email', $email)->count();
-            if ($emailExists === 0) {
+        if($name == '') {
+            return response()->json('Por favor informe seu nome!');
+        }
+        if($email == '') {
+            return response()->json('Por favor informe seu email!');
+        }
+        if($password == '') {
+            return response()->json('Por favor informe sua senha!');
+        }
+        if($uf == '') {
+            return response()->json('Por favor informe seu estado!');
+        }
+        if($city == '') {
+            return response()->json('Por favor informe sua cidade!');
+        }
+        if($cellphone == '') {
+            return response()->json('Por favor informe seu numéro de celular!');
+        }
+        if($cpf == '') {
+            return response()->json('Por favor informe seu cpf!');
+        }
+        if($birthday == '') {
+            return response()->json('Por favor informe seu data de nascimento!');
+        }
+        if($sexy == '') {
+            return response()->json('Por favor informe seu Sexo!');
+        }
+        
 
-                $hash = password_hash($password, PASSWORD_DEFAULT);
+            
+        if ($emailExists === 0) {
 
-                $newUser = new User();
-                $newUser->name = $name;
-                $newUser->email = $email;
-                $newUser->password = $hash;
-                $newUser->save();
+            $hash = password_hash($password, PASSWORD_DEFAULT);
 
-                $token = Auth()->attempt([
-                    'email' => $email,
-                    'password'=> $password
-                ]);
+            $newUser = new User();
+            $newUser->name = $name;
+            $newUser->email = $email;
+            $newUser->password = $hash;
+            $newUser->uf = $uf;
+            $newUser->city = $city;
+            $newUser->cellphone = $cellphone;
+            $newUser->cpf = $cpf;
+            $newUser->birthday = $birthday;
+            $newUser->sexy = $sexy;
+            $newUser->save();
+
+            $token = Auth()->attempt([
+                'email' => $email,
+                'password'=> $password
+            ]);
+
+            return response()->json("Sucess", 202);
 
 
-                if(!$token) {
-                    $array['error'] = 'Ocorreu um erro';
-                    return $array;
-                } 
+            if(!$token) {
+                return response()->json("erro token invalid", 202);
+            } 
                 
-                $array['token'] = $token;
+            $array['token'] = $token;
                 
             } else {
-                $array['error'] = "Email já cadastrador";
-                return $array;
-            }
-            
-        } else {
-            $array['error'] = "não enviou todos os campos";
-            return $array;
+            return response()->json("Email já cadastrado", 202); 
         }
-
+            
         return $array;
     }
 }

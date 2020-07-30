@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\User;
 
 class UserController extends Controller
@@ -23,54 +24,113 @@ class UserController extends Controller
         return response()->json($data);
     }
 
+    public function create(Request $request) {
+
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $uf = $request->input('uf');
+        $city = $request->input('city');
+        $cellphone = $request->input('cellphone');
+        $cpf = $request->input('cpf');
+        $birthday = $request->input('birthday');
+        $sexy = $request->input('sexy');
+
+        $emailExists = User::where('email', $email)->count();
+
+        if($name == '') {
+            return response()->json('Por favor informe seu nome!');
+        }
+        if($email == '') {
+            return response()->json('Por favor informe seu email!');
+        }
+        if($password == '') {
+            return response()->json('Por favor informe sua senha!');
+        }
+        if($uf == '') {
+            return response()->json('Por favor informe seu estado!');
+        }
+        if($city == '') {
+            return response()->json('Por favor informe sua cidade!');
+        }
+        if($cellphone == '') {
+            return response()->json('Por favor informe seu numéro de celular!');
+        }
+        if($cpf == '') {
+            return response()->json('Por favor informe seu cpf!');
+        }
+        if($birthday == '') {
+            return response()->json('Por favor informe seu data de nascimento!');
+        }
+        if($sexy == '') {
+            return response()->json('Por favor informe seu Sexo!');
+        }
+        
+        if ($emailExists === 0) {
+
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $newUser = new User();
+        $newUser->name = $name;
+        $newUser->email = $email;
+        $newUser->password = $hash;
+        $newUser->uf = $uf;
+        $newUser->city = $city;
+        $newUser->cellphone = $cellphone;
+        $newUser->cpf = $cpf;
+        $newUser->birthday = $birthday;
+        $newUser->sexy = $sexy;
+        $newUser->save();
+
+        return response()->json("Sucess", 202);
+
+        } else {
+            return response()->json("Email já cadastrado", 202); 
+        }
+    }
+
     public function show($id){
 
         $user = $this->user->find($id);
-        if (! $user) return response()->json(ApiError::errorMessage('Usuário não encontrado!', 4040), 404);
+        if (! $user) return response()->json('Usuário não encontrado!', 404);
 
         $data = ['data' => $user];
         return response()->json($data);
     }
 
-    public function update(Request $request) {
-        $array = ['error' => ''];
+    public function update(Request $request, $id) {
 
         $name = $request->input('name');
         $email = $request->input('email');
         $password = $request->input('password');
-        $password_confirm = $request->input('password_confirm');
+        $uf = $request->input('uf');
+        $city = $request->input('city');
+        $cellphone = $request->input('cellphone');
+        $cpf = $request->input('cpf');
+        $birthday = $request->input('birthday');
+        $sexy = $request->input('sexy');
 
-        $user = User::find($this->loggedUser['id']);
+        $user = $this->user->find($id);
+        $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        if($name) {
+        if($user){
+
             $user->name = $name;
+            $user->email = $email;
+            $user->password = $hash;
+            $user->uf = $uf;
+            $user->city = $city;
+            $user->cellphone = $cellphone;
+            $user->cpf = $cpf;
+            $user->birthday = $birthday;
+            $user->sexy = $sexy;
+            $user->update();
+                
+            return response()->json("Sucess", 202);
+
+        } else {
+            return response()->json('error');
         }
-
-        if($email) {
-            if($email != $user->email) {
-                $emailExists = User::where('email', $email)->count();
-                if($emailExists === 0) {
-                    $user->email = $email;
-                } else {
-                    $array['error'] = 'E-mail já existe no sistema';
-                    return $array;
-                }
-            }
-        }
-
-        if($password && $password_confirm) {
-            if($password === $password_confirm) {
-                $hash = password_hash($password, PASSWORD_DEFAULT);
-                $user->password = $hash;
-            } else {
-                $array['error'] = "As senhas não conferem!";
-                return $array;
-            }
-        }
-
-        $user->save();
-
-        return $array;
     }
 
     public function delete(User $id){
@@ -81,9 +141,9 @@ class UserController extends Controller
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json(ApiError::errorMessage($e->getMessage(), 1012));
+                return response()->json('error');
             }
-            return response()->json(ApiError::errorMessage('Error ao realizar operação de exclusão', 1012));
+            return response()->json('Error ao realizar operação de exclusão');
         }
     }
 }

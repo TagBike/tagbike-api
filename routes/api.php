@@ -17,12 +17,13 @@ Route::group(['prefix' => 'auth', 'middleware' => []], function () {
 
 
 //rotas de usuário 'auth:api'
-Route::post('/user/create', 'AuthController@create');
+Route::post('/create', 'AuthController@create');
 
 Route::group(['prefix' => 'user', 'middleware' => []], function () {
     Route::get('/', 'UserController@index');
+    Route::post('/create', 'UserController@create');
     Route::get('/{id}', 'UserController@show');
-    Route::put('/update', 'UserController@update');
+    Route::put('/update/{id}', 'UserController@update');
     Route::delete('/delete/{id}', 'UserController@delete');
 
 });
