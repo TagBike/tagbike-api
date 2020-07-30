@@ -15,7 +15,19 @@ class CreateBikesTable extends Migration
     {
         Schema::create('bikes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('serialNumber')->unique();
+            $table->string('biketype', 20);
+            $table->string('brand', 20);
+            $table->string('model', 20);
+            $table->string('color', 50);
+            $table->string('photoBike')->nullable();
+            $table->string('forwardExchange', 20)->nullable();
+            $table->string('rearDerailleur', 20)->nullable();
+            $table->string('brakeType', 20)->nullable();
+            $table->string('typeSuspension', 20)->nullable();
+            $table->string('wheelType', 20)->nullable();
+            $table->string('forkType', 20)->nullable();
+            $table->string('frametype', 20)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

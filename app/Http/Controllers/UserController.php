@@ -82,7 +82,7 @@ class UserController extends Controller
         $newUser->sexy = $sexy;
         $newUser->save();
 
-        return response()->json("Sucess", 202);
+        return response()->json("User registered successfully", 202);
 
         } else {
             return response()->json("Email já cadastrado", 202); 
@@ -126,10 +126,10 @@ class UserController extends Controller
             $user->sexy = $sexy;
             $user->update();
                 
-            return response()->json("Sucess", 202);
+            return response()->json('User update successfully!', 202);
 
         } else {
-            return response()->json('error');
+            return response()->json('Error update user!', 400);
         }
     }
 
