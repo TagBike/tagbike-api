@@ -32,35 +32,148 @@ class ClientController extends Controller
     }
 
     public function update(Request $request, $id) {
+
         $name = $request->input('name');
+        $cpf = $request->input('cpf');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $cep = $request->input('cep');
+        $uf = $request->input('uf');
+        $city = $request->input('city');
+        $neighborhood = $request->input('neighborhood');
+        $address = $request->input('address');
+        $number = $request->input('number');
+        $complement = $request->input('complement');
+        $phone = $request->input('phone');
+        $cellphone = $request->input('cellphone');
+        $birthday = $request->input('birthday');
 
-        if($id && $name){
-            $client = $this->client->find($id);
+        $client = $this->client->find($id);
+        
 
-            if($client){
+        if($client){
 
+            if(!empty($name)){
                 $client->name = $name;
-                $client->save();
-
-            } else {
-                return response()->json('error');
             }
+            if(!empty($cpf)){
+                $client->cpf = $cpf;
+            }
+            if(!empty($email)){
+                $client->email = $email;
+            }
+            if(!empty($password)){
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $client->password =$hash;
+            }
+            if(!empty($cep)){
+                $client->cep = $cep;
+            }
+            if(!empty($uf)){
+                $client->uf = $uf;
+            }
+            if(!empty($city)){
+                $client->city = $city;
+            }
+            if(!empty($neighborhood)){
+                $client->neighborhood = $neighborhood;
+            }
+            if(!empty($address)){
+                $client->address = $address;
+            }
+            if(!empty($phone)){
+                $client->phone = $phone;
+            }
+            $client->complement = $complement;
+            $client->cellphone = $cellphone;
+            $client->birthday = $birthday;
+            $client->update();
+                
+            return response()->json('Client update successfully!', 202);
+
+        } else {
+            return response()->json('Error update Client!', 400);
         }
     }
 
     public function create(Request $request) {
-        $array = ['error' => ''];
 
         $name = $request->input('name');
+        $cpf = $request->input('cpf');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $cep = $request->input('cep');
+        $uf = $request->input('uf');
+        $city = $request->input('city');
+        $neighborhood = $request->input('neighborhood');
+        $address = $request->input('address');
+        $number = $request->input('number');
+        $complement = $request->input('complement');
+        $phone = $request->input('phone');
+        $cellphone = $request->input('cellphone');
+        $birthday = $request->input('birthday');
 
-        if ($name) {
-            $newClient = new Client();
-            $newClient->name = $name;
-            $newClient->save();
-            return response()->json("sucess");
+        $emailExists = Client::where('email', $email)->count();
+
+        if($name == '') {
+            return response()->json('Por favor informe seu nome!');
+        }
+        if($cpf == '') {
+            return response()->json('Por favor informe seu cpf!');
+        }
+        if($email == '') {
+            return response()->json('Por favor informe seu email!');
+        }
+        if($password == '') {
+            return response()->json('Por favor informe sua senha!');
+        }
+        if($cep == '') {
+            return response()->json('Por favor informe sseu cep!');
+        }
+        if($uf == '') {
+            return response()->json('Por favor informe seu estado!');
+        }
+        if($city == '') {
+            return response()->json('Por favor informe sua cidade!');
+        }
+        if($neighborhood == '') {
+            return response()->json('Por favor informe seu bairro!');
+        }
+        if($address == '') {
+            return response()->json('Por favor informe seu Endereço!');
+        }
+        if($number == '') {
+            return response()->json('Por favor informe o número!');
+        }
+        if($phone == '') {
+            return response()->json('Por favor informe o número de telefone!');
+        }
+        
+        if ($emailExists === 0) {
+
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $newClient = new Client();
+        $newClient->name = $name;
+        $newClient->cpf = $cpf;
+        $newClient->email = $email;
+        $newClient->password =$hash;
+        $newClient->cep = $cep;
+        $newClient->uf = $uf;
+        $newClient->city = $city;
+        $newClient->neighborhood = $neighborhood;
+        $newClient->address = $address;
+        $newClient->number = $number;
+        $newClient->complement = $complement;
+        $newClient->phone = $phone;
+        $newClient->cellphone = $cellphone;
+        $newClient->birthday = $birthday;
+        $newClient->save();
+
+        return response()->json("Client registered successfully", 202);
+
         } else {
-            $array['error'] = "não enviou todos os campos";
-            return response()->json($array);
+            return response()->json("Email já cadastrado", 202); 
         }
     }
     
