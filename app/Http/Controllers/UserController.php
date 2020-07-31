@@ -111,19 +111,46 @@ class UserController extends Controller
         $sexy = $request->input('sexy');
 
         $user = $this->user->find($id);
+        $emailExists = User::where('email', $email)->count();
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
         if($user){
 
-            $user->name = $name;
-            $user->email = $email;
-            $user->password = $hash;
-            $user->uf = $uf;
-            $user->city = $city;
-            $user->cellphone = $cellphone;
-            $user->cpf = $cpf;
-            $user->birthday = $birthday;
-            $user->sexy = $sexy;
+            if(!empty($name)){
+                $user->name = $name;
+            }
+            if(!empty($email)){
+                if($email != $user->email){
+                    if ($emailExists === 0) {
+                        $user->email = $email;
+                    } else {
+                        return response()->json("Email já cadastrado", 202); 
+                    }
+                } 
+            }
+            if(!empty($password)){
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+                $user->password =$hash;
+            }
+            if(!empty($uf)){
+                $user->uf = $uf;
+            }
+            if(!empty($city)){
+                $user->city = $city;
+            }
+            if(!empty($cpf)){
+                $user->cpf = $cpf;
+            }
+            if(!empty($cellphone)){
+                $user->cellphone = $cellphone;
+            }
+            if(!empty($birthday)){
+                $user->birthday = $birthday;
+            }
+            if(!empty($sexy)){
+                $user->sexy = $sexy;
+            }
+        
             $user->update();
                 
             return response()->json('User update successfully!', 202);

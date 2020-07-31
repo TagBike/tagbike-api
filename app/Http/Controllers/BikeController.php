@@ -111,11 +111,22 @@ class BikeController extends Controller
 
             if($bike){ 
 
-                $bike->serialNumber = $serialNumber;
-                $bike->biketype = $biketype;
-                $bike->brand = $brand;
-                $bike->model = $model;
-                $bike->color = $color;
+                if(!empty($serialNumber)){
+                    $bike->serialNumber = $serialNumber;
+                }
+                if(!empty($biketype)){
+                    $bike->biketype = $biketype;
+                }
+                if(!empty($brand)){
+                    $bike->brand = $brand;
+                }
+                if(!empty($model)){
+                    $bike->model = $model;
+                }
+                if(!empty($color)){
+                    $bike->color = $color;
+                }
+               
                 $bike->photoBike = $photoBike;
                 $bike->forwardExchange = $forwardExchange;
                 $bike->rearDerailleur = $rearDerailleur;

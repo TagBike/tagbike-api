@@ -95,8 +95,6 @@ class AuthController extends Controller
             return response()->json('Por favor informe seu Sexo!');
         }
         
-
-            
         if ($emailExists === 0) {
 
             $hash = password_hash($password, PASSWORD_DEFAULT);

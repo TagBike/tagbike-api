@@ -49,6 +49,7 @@ class ClientController extends Controller
         $birthday = $request->input('birthday');
 
         $client = $this->client->find($id);
+        $emailExists = Client::where('email', $email)->count();
         
 
         if($client){
@@ -60,7 +61,13 @@ class ClientController extends Controller
                 $client->cpf = $cpf;
             }
             if(!empty($email)){
-                $client->email = $email;
+                if($email != $user->email){
+                    if ($emailExists === 0) {
+                        $user->email = $email;
+                    } else {
+                        return response()->json("Email já cadastrado", 202); 
+                    }
+                } 
             }
             if(!empty($password)){
                 $hash = password_hash($password, PASSWORD_DEFAULT);
