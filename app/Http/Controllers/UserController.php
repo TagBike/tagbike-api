@@ -82,7 +82,20 @@ class UserController extends Controller
         $newUser->sexy = $sexy;
         $newUser->save();
 
+
+        $token = Auth()->attempt([
+            'email' => $email,
+            'password'=> $password
+        ]);
+
+        if(!$token) {
+            return response()->json("erro token invalid", 202);
+        } 
+            
+        $array['token'] = $token;
+
         return response()->json("User registered successfully", 202);
+
 
         } else {
             return response()->json("Email já cadastrado", 202); 

@@ -19,7 +19,7 @@ Route::group(['prefix' => 'auth', 'middleware' => []], function () {
 //rotas de usuário 'auth:api'
 Route::post('/create', 'AuthController@create');
 
-Route::group(['prefix' => 'user', 'middleware' => []], function () {
+Route::group(['prefix' => 'user', 'middleware' => ['auth:api']], function () {
     Route::get('/', 'UserController@index');
     Route::post('/create', 'UserController@create');
     Route::get('/{id}', 'UserController@show');
@@ -36,7 +36,7 @@ Route::group(['prefix' => 'client', 'middleware' => []], function () {
     Route::delete('/delete/{id}', 'ClientController@delete');
 });
 
-Route::group(['prefix' => 'bike', 'middleware' => []], function () {
+Route::group(['prefix' => 'bike', 'middleware' => ['auth:api']], function () {
     Route::get('/', 'BikeController@index');
     Route::post('/create', 'BikeController@create');
     Route::get('/{id}', 'BikeController@show');

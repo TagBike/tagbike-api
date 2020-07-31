@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Tag;
+use File;
 
 class TagController extends Controller
 {
@@ -25,56 +25,93 @@ class TagController extends Controller
     public function show($id){
 
         $tag = $this->tag->find($id);
-        if (! $tag) return response()->json(ApiError::errorMessage('Etiqueta não encontrado!', 4040), 404);
+        if (! $tag) return response()->json('Tag not foud!', 404);
 
         $data = ['data' => $tag];
         return response()->json($data);
     }
 
     public function update(Request $request, $id) {
+        
         $name = $request->input('name');
+        $qrCode = $request->input('qrCode');
+        $qrImg = $request->file('qrImg');
 
-        if($id && $name){
-            $tag = $this->tag->find($id);
+        $tag = $this->tag->find($id);
 
-            if($tag){
+        if($tag){ 
 
-                $tag->name = $name;
-                $tag->save();
+            if ($tag['qr_img'] === $tag['qr_img']) {
+                if(!empty($name)){
+                    $tag->name = $name;
+                }
+                if(!empty($qrCode)){
+                    $tag->qr_code = $qrCode;
+                }
+                $tag->update(); 
+            
+                return response()->json('Tag update successfully ', 202);
 
             } else {
-                return response()->json('error');
+                $imgName = $tag['qr_img'];
+                File::delete('media/images/'.$imgName);
+
+                $ext = $qrImg->getClientOriginalExtension();
+                $imageName = time().'.'.$ext;
+
+                $request->file('qrImg')->move(public_path('media/images'), $imageName);
+                $uploadImg = 'media/images/'.$imageName;
+
+                if(!empty($name)){
+                    $tag->name = $name;
+                }
+                if(!empty($qrCode)){
+                    $tag->qr_code = $qrCode;
+                }
+                $tag->qr_img= $uploadImg;
+                $tag->update(); 
+
+                return response()->json('foi aqui 2', 202);
             }
+
+        } else {
+            return response()->json('Error update', 400);
         }
     } 
 
     public function create(Request $request) {
-        $array = ['error' => ''];
-
+    
         $name = $request->input('name');
+        $qrCode = $request->input('qrCode');
+        $qrImg = $request->file('qrImg');
 
-        if ($name) {
-            $newTag = new Tag;
-            $newTag->name = $name;
-            $newTag->save();
-            return response()->json("sucess");
-        } else {
-            $array['error'] = "não enviou todos os campos";
-            return $array;
-        }
+        $ext = $qrImg->getClientOriginalExtension();
+        $imageName = time().'.'.$ext;
+
+        $request->file('qrImg')->move(public_path('media/images'), $imageName);
+        $uploadImg = 'media/images/'.$imageName;
+
+        $newTag = new Tag;
+        $newTag->name = $name;
+        $newTag->id_bike = "1";
+        $newTag->qr_code = $qrCode;
+        $newTag->qr_img = $uploadImg;
+        $newTag->save();
+        return response()->json("sucess");
+       
     }
     
     public function delete(Tag $id){
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'Etiqueta Excluída com sucesso!']], 200);
+            return response()->json(['data' => ['msg' => 'Tag delete successfully!']], 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json(ApiError::errorMessage($e->getMessage(), 1012));
+                return response()->json('Error', 1012);
             }
-            return response()->json(ApiError::errorMessage('Error ao realizar operação de exclusão', 1012));
+            return response()->json('Error ao realizar operação de exclusão', 1012);
         }
     }
 }

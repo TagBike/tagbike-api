@@ -5,21 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Bike;
+use App\User;
 
 class BikeController extends Controller
 {
 
     private $bike;
+    private $user;
 
-    public function __construct(Bike $bike){
+    public function __construct(Bike $bike, User $user){
 
         $this->bike = $bike;
+        $this->user = $user;
 
     }
 
     public function index(){
+        
+        $data = ['data' => $this->bike->with('user')->paginate(10)];
 
-        $data = ['data' => $this->bike::paginate(10)];
+        // fazer retorna so a bike do usuario logado
         return response()->json($data);
     }
 
@@ -68,8 +73,11 @@ class BikeController extends Controller
         
         if ($serialNumberExists === 0) {
 
+        $userId = Auth::user()->id;
+
         $newBike = new Bike();
         $newBike->serialNumber = $serialNumber;
+        $newBike->id_user = $userId;
         $newBike->biketype = $biketype;
         $newBike->brand = $brand;
         $newBike->model = $model;
