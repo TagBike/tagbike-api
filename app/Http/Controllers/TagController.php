@@ -18,7 +18,7 @@ class TagController extends Controller
 
     public function index(){
 
-        $data = ['data' => $this->tag::paginate(10)];
+        $data = $this->tag->all();
         return response()->json($data);
     }
 

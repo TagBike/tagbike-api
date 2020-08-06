@@ -18,7 +18,7 @@ class ClientController extends Controller
 
     public function index(){
 
-        $data = ['data' => $this->client::paginate(10)];
+        $data = $this->client->all();
         return response()->json($data);
     }
 

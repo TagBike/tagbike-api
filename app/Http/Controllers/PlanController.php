@@ -18,7 +18,7 @@ class PlanController extends Controller
 
     public function index(){
 
-        $data = ['data' => $this->plan::paginate(10)];
+        $data = $this->plan->all();
         return response()->json($data);
     }
 

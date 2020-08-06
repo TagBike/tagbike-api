@@ -22,9 +22,8 @@ class BikeController extends Controller
 
     public function index(){
         
-        $data = ['data' => $this->bike->with('user')->paginate(10)];
-
-        // fazer retorna so a bike do usuario logado
+        $userId = Auth::user()->id;
+        $data = $this->bike->with('user')->where('id_user', $userId)->get();
         return response()->json($data);
     }
 
