@@ -83,19 +83,19 @@ class TagController extends Controller
     
         $name = $request->input('name');
         $qrCode = $request->input('qrCode');
-        $qrImg = $request->file('qrImg');
+        // $qrImg = $request->file('qrImg');
 
-        $ext = $qrImg->getClientOriginalExtension();
-        $imageName = time().'.'.$ext;
+        // $ext = $qrImg->getClientOriginalExtension();
+        // $imageName = time().'.'.$ext;
 
-        $request->file('qrImg')->move(public_path('media/images'), $imageName);
-        $uploadImg = 'media/images/'.$imageName;
+        // $request->file('qrImg')->move(public_path('media/images'), $imageName);
+        // $uploadImg = 'media/images/'.$imageName;
 
         $newTag = new Tag;
         $newTag->name = $name;
         $newTag->id_bike = "1";
         $newTag->qr_code = $qrCode;
-        $newTag->qr_img = $uploadImg;
+        // $newTag->qr_img = $uploadImg;
         $newTag->save();
         return response()->json("sucess");
        
