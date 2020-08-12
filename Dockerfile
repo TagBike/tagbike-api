@@ -1,5 +1,12 @@
-FROM creativitykills/nginx-php-server:2.0.0
+FROM php:7
 LABEL maintainer="Gabriel Faustino <gahfaustino@gmail.com>"
-COPY . /var/www/
-RUN chmod -Rf 777 /var/www/storage/
+RUN apt-get update -y && apt-get install -y openssl zip unzip git
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN docker-php-ext-install pdo pdo_mysql
+WORKDIR /app
+COPY . /app
+RUN chmod -Rf 777 /app/storage/
+RUN composer install
 
+CMD php artisan serve --host=0.0.0.0 --port=80
+EXPOSE 443 80
