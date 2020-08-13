@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Client;
+use Auth;
 
 class ClientController extends Controller
 {
@@ -159,8 +160,10 @@ class ClientController extends Controller
         if ($emailExists === 0) {
 
             $hash = password_hash($password, PASSWORD_DEFAULT);
+            $idUser = Auth::id();
 
         $newClient = new Client();
+        $newClient->id_user = $idUser;
         $newClient->name = $name;
         $newClient->cpf = $cpf;
         $newClient->email = $email;
