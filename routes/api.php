@@ -16,10 +16,10 @@ Route::group(['prefix' => 'auth', 'middleware' => []], function () {
 });
 
 
-//rotas de usuário 'auth:api'
+//rotas de usuário
 Route::post('/create', 'AuthController@create');
 
-Route::group(['prefix' => 'user', 'middleware' => ['auth:api']], function () {
+Route::group(['prefix' => 'user', 'middleware' => []], function () {
     Route::get('/', 'UserController@index');
     Route::post('/create', 'UserController@create');
     Route::get('/{id}', 'UserController@show');
@@ -28,7 +28,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:api']], function () {
 
 });
 
-Route::group(['prefix' => 'client', 'middleware' => ['auth:api']], function () {
+Route::group(['prefix' => 'client', 'middleware' => []], function () {
     Route::get('/', 'ClientController@index');
     Route::post('/create', 'ClientController@create');
     Route::get('/{id}', 'ClientController@show');
@@ -36,7 +36,7 @@ Route::group(['prefix' => 'client', 'middleware' => ['auth:api']], function () {
     Route::delete('/delete/{id}', 'ClientController@delete');
 });
 
-Route::group(['prefix' => 'bike', 'middleware' => ['auth:api']], function () {
+Route::group(['prefix' => 'bike', 'middleware' => []], function () {
     Route::get('/', 'BikeController@index');
     Route::post('/create', 'BikeController@create');
     Route::get('/{id}', 'BikeController@show');
@@ -44,7 +44,7 @@ Route::group(['prefix' => 'bike', 'middleware' => ['auth:api']], function () {
     Route::delete('/delete/{id}', 'BikeController@delete');
 });
 
-Route::group(['prefix' => 'plan', 'middleware' => ['auth:api']], function () {
+Route::group(['prefix' => 'plan', 'middleware' => []], function () {
     Route::get('/', 'PlanController@index');
     Route::post('/create', 'PlanController@create');
     Route::get('/{id}', 'PlanController@show');
@@ -52,7 +52,7 @@ Route::group(['prefix' => 'plan', 'middleware' => ['auth:api']], function () {
     Route::delete('/delete/{id}', 'PlanController@delete');
 });
 
-Route::group(['prefix' => 'tag', 'middleware' => ['auth:api']], function () {
+Route::group(['prefix' => 'tag', 'middleware' => []], function () {
     Route::get('/', 'TagController@index');
     Route::post('/create', 'TagController@create');
     Route::get('/{id}', 'TagController@show');
