@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Plan;
 
@@ -9,9 +10,11 @@ class PlanController extends Controller
 {
 
     private $plan;
+    private $loggedUser;
 
     public function __construct(Plan $plan){
-
+        $this->middleware('auth:api');
+        $this->loggedUser = Auth::user();
         $this->plan = $plan;
 
     }

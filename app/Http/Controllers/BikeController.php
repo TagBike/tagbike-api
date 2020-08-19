@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Bike;
 use App\User;
 
@@ -12,9 +12,11 @@ class BikeController extends Controller
 
     private $bike;
     private $user;
+    private $loggedUser;
 
     public function __construct(Bike $bike, User $user){
-
+        $this->middleware('auth:api');
+        $this->loggedUser = Auth::user();
         $this->bike = $bike;
         $this->user = $user;
 

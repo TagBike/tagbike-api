@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Client;
-use Auth;
 
 class ClientController extends Controller
 {
 
     private $client;
+    private $loggedUser;
 
     public function __construct(Client $client){
-
+        $this->middleware('auth:api');
+        $this->loggedUser = Auth::user();
         $this->client = $client;
 
     }

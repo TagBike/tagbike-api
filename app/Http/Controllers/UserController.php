@@ -13,9 +13,10 @@ class UserController extends Controller
     private $loggedUser;
 
     public function __construct(User $user) {
-        
+        $this->middleware('auth:api');
+        $this->loggedUser = Auth::user();
         $this->user = $user;
-        $this->loggedUser = auth()->user();
+        
     }
 
     public function index(){

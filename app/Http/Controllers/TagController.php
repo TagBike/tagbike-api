@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Tag;
 use File;
 
@@ -9,9 +11,11 @@ class TagController extends Controller
 {
 
     private $tag;
+    private $loggedUser;
 
     public function __construct(Tag $tag){
-
+        $this->middleware('auth:api');
+        $this->loggedUser = Auth::user();
         $this->tag = $tag;
 
     }

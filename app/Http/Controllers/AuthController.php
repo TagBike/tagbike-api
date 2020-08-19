@@ -116,6 +116,8 @@ class AuthController extends Controller
                 'password'=> $password
             ]);
 
+
+
             return response()->json("Sucess", 202);
 
 
