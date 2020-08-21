@@ -38,6 +38,7 @@ class ClientController extends Controller
 
         $name = $request->input('name');
         $cpf = $request->input('cpf');
+        $rg = $request->input('rg');
         $email = $request->input('email');
         $password = $request->input('password');
         $cep = $request->input('cep');
@@ -62,6 +63,9 @@ class ClientController extends Controller
             }
             if(!empty($cpf)){
                 $client->cpf = $cpf;
+            }
+            if(!empty($rg)){
+                $client->rg = $rg;
             }
             if(!empty($email)){
                 if($email != $user->email){
@@ -110,6 +114,7 @@ class ClientController extends Controller
 
         $name = $request->input('name');
         $cpf = $request->input('cpf');
+        $rg = $request->input('rg');
         $email = $request->input('email');
         $password = $request->input('password');
         $cep = $request->input('cep');
@@ -130,6 +135,9 @@ class ClientController extends Controller
         }
         if($cpf == '') {
             return response()->json('Por favor informe seu cpf!');
+        }
+        if($rg == '') {
+            return response()->json('Por favor informe seu rg!');
         }
         if($email == '') {
             return response()->json('Por favor informe seu email!');
@@ -168,6 +176,7 @@ class ClientController extends Controller
         $newClient->id_user = $idUser;
         $newClient->name = $name;
         $newClient->cpf = $cpf;
+        $newClient->rg = $rg;
         $newClient->email = $email;
         $newClient->password =$hash;
         $newClient->cep = $cep;
