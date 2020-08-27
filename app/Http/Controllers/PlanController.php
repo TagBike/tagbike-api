@@ -100,4 +100,5 @@ class PlanController extends Controller
             return response()->json('Error ao realizar operação de exclusão', 412);
         }
     }
+
 }

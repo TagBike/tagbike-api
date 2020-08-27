@@ -60,3 +60,8 @@ Route::group(['prefix' => 'tag'], function () {
     Route::delete('/delete/{id}', 'TagController@delete');
 });
 
+Route::group(['prefix' => 'search'], function () {
+    Route::get('/bike', 'SearchController@searchBike');
+    Route::get('/plan', 'SearchController@searchPlan');
+});
+
