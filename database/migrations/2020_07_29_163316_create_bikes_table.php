@@ -15,6 +15,7 @@ class CreateBikesTable extends Migration
     {
         Schema::create('bikes', function (Blueprint $table) {
             $table->id();
+            $table->string('customer_id', 20);
             $table->string('serialNumber')->unique();
             $table->string('biketype', 20);
             $table->string('brand', 20);
