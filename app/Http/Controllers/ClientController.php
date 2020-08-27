@@ -28,7 +28,7 @@ class ClientController extends Controller
     public function show($id){
 
         $client = $this->client->find($id);
-        if (! $client) return response()->json(ApiError::errorMessage('Cliente não encontrado!', 4040), 404);
+        if (! $client) return response()->json('Cliente não encontrado!', 404);
 
         $data = ['data' => $client];
         return response()->json($data);
@@ -41,6 +41,7 @@ class ClientController extends Controller
         $rg = $request->input('rg');
         $email = $request->input('email');
         $password = $request->input('password');
+        $gender = $request->input('gender');
         $cep = $request->input('cep');
         $uf = $request->input('uf');
         $city = $request->input('city');
@@ -80,6 +81,9 @@ class ClientController extends Controller
                 $hash = password_hash($password, PASSWORD_DEFAULT);
                 $client->password =$hash;
             }
+            if(!empty($gender)){
+                $client->gender = $gender;
+            }
             if(!empty($cep)){
                 $client->cep = $cep;
             }
@@ -117,6 +121,7 @@ class ClientController extends Controller
         $rg = $request->input('rg');
         $email = $request->input('email');
         $password = $request->input('password');
+        $gender = $request->input('gender');
         $cep = $request->input('cep');
         $uf = $request->input('uf');
         $city = $request->input('city');
@@ -141,6 +146,9 @@ class ClientController extends Controller
         }
         if($email == '') {
             return response()->json('Por favor informe seu email!');
+        }
+        if($gender == '') {
+            return response()->json('Por favor informe o sexo!');
         }
         if($password == '') {
             return response()->json('Por favor informe sua senha!');
@@ -179,6 +187,7 @@ class ClientController extends Controller
         $newClient->rg = $rg;
         $newClient->email = $email;
         $newClient->password =$hash;
+        $newClient->gender =$gender;
         $newClient->cep = $cep;
         $newClient->uf = $uf;
         $newClient->city = $city;
