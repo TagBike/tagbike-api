@@ -67,7 +67,7 @@ class ClientController extends Controller
             if(!empty($rg)){
                 $client->rg = $rg;
             }
-            if(!empty($email)){
+            /*if(!empty($email)){
                 if($email != $user->email){
                     if ($emailExists === 0) {
                         $user->email = $email;
@@ -75,7 +75,7 @@ class ClientController extends Controller
                         return response()->json("Email já cadastrado", 202); 
                     }
                 } 
-            }
+            }*/
             if(!empty($password)){
                 $hash = password_hash($password, PASSWORD_DEFAULT);
                 $client->password =$hash;

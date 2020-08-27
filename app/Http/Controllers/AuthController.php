@@ -19,6 +19,8 @@ class AuthController extends Controller
     public function login(Request $request) {
         $array = ['error' => ''];
 
+        $userId = Auth::user()->id;
+
         $email = $request->input('email');
         $password = $request->input('password');
 
@@ -32,6 +34,7 @@ class AuthController extends Controller
                 return response()->json("E-mail e/ou Senha inválidos"); 
             }
     
+            $array['userId'] = $userId;
             $array['token'] = $token;
             return $array;
         } 

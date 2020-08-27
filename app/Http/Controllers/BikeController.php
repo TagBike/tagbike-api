@@ -40,6 +40,7 @@ class BikeController extends Controller
 
     public function create(Request $request) {
 
+        $customerId = $request->input('customer_id');
         $serialNumber = $request->input('serialNumber');
         $biketype = $request->input('biketype');
         $brand = $request->input('brand');
@@ -56,6 +57,9 @@ class BikeController extends Controller
 
         $serialNumberExists = $this->bike->where('serialNumber', $serialNumber)->count();
 
+        if($customerId == '') {
+            return response()->json('Por favor informe o código do proprietário!');
+        }
         if($serialNumber == '') {
             return response()->json('Por favor informe o número de série!');
         }
@@ -74,11 +78,9 @@ class BikeController extends Controller
         
         if ($serialNumberExists === 0) {
 
-        $userId = Auth::user()->id;
-
         $newBike = new Bike();
         $newBike->serialNumber = $serialNumber;
-        $newBike->id_user = $userId;
+        $newBike->customer_id = $customerId;
         $newBike->biketype = $biketype;
         $newBike->brand = $brand;
         $newBike->model = $model;
@@ -146,10 +148,10 @@ class BikeController extends Controller
                 $bike->frametype = $frametype;
                 $bike->update();
 
-                return response()->json("Bike update successfully ", 202);
+                return response()->json("success", 202);
 
             } else {
-                return response()->json('Error update', 400);
+                return response()->json('error', 400);
             }
     }    
 
