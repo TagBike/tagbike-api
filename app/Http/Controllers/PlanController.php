@@ -28,63 +28,43 @@ class PlanController extends Controller
     public function show($id){
 
         $plan = $this->plan->find($id);
-        if (! $plan) return response()->json('Plano não encontrado!', 404);
+        if (! $plan) return response()->json(ApiError::errorMessage('Plano não encontrado!', 4040), 404);
 
         $data = ['data' => $plan];
         return response()->json($data);
     }
 
     public function update(Request $request, $id) {
+        $name = $request->input('name');
 
-        $plan = $this->plan->find($id);
+        if($id && $name){
+            $plan = $this->plan->find($id);
 
-        if($plan){
-            $name = $request->input('name');
-            $price = $request->input('price');
-            $description = $request->input('description');
+            if($plan){
 
-            if(!empty($name)){
                 $plan->name = $name;
-            }
-            if(!empty($price)){
-                $plan->price = $price;
-            }
-            if(!empty($description)){
-                $plan->description = $description;
-            }
-            $plan->update();
-            return response()->json('Plan update successfully!', 202);
+                $plan->save();
 
-        } else {
-            return response()->json('error update plan', 412);
+            } else {
+                return response()->json('error');
+            }
         }
     }   
 
     public function create(Request $request) {
+        $array = ['error' => ''];
 
         $name = $request->input('name');
-        $price = $request->input('price');
-        $description = $request->input('description');
 
-        if($name == '') {
-            return response()->json('Por favor informe seu nome!');
-        }
-        if($price == '') {
-            return response()->json('Por favor informe o preço!');
-        }
-
-        $newPlan = new Plan();
-        if ($newPlan) {
+        if ($name) {
+            $newPlan = new Plan();
             $newPlan->name = $name;
-            $newPlan->price = $price;
-            $newPlan->description = $description;
             $newPlan->save();
-            return response()->json("Plan registered successfully", 202);
+            return response()->json("sucess");
         } else {
-            return response()->json("Error create Plan", 412);
+            $array['error'] = "não enviou todos os campos";
+            return $array;
         }
-        
-        
     } 
 
     public function delete(Plan $id){
@@ -95,10 +75,9 @@ class PlanController extends Controller
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json('Error', 412);
+                return response()->json(ApiError::errorMessage($e->getMessage(), 1012));
             }
-            return response()->json('Error ao realizar operação de exclusão', 412);
+            return response()->json(ApiError::errorMessage('Error ao realizar operação de exclusão', 1012));
         }
     }
-
 }
