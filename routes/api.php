@@ -28,12 +28,18 @@ Route::group(['prefix' => 'user'], function () {
 
 });
 
-Route::group(['prefix' => 'client'], function () {
-    Route::get('/', 'ClientController@index');
-    Route::post('/create', 'ClientController@create');
-    Route::get('/{id}', 'ClientController@show');
-    Route::put('/update/{id}', 'ClientController@update');
-    Route::delete('/delete/{id}', 'ClientController@delete');
+Route::group(['prefix' => 'customer'], function () {
+    Route::get('/', 'CustomerController@index');
+    Route::post('/create', 'CustomerController@create');
+    Route::get('/{id}', 'CustomerController@show');
+    Route::put('/update/{id}', 'CustomerController@update');
+    Route::delete('/delete/{id}', 'CustomerController@delete');
+});
+
+Route::group(['prefix' => 'authCustomer'], function () {
+    Route::post('/login', 'CustomerController@login');
+    Route::post('/logout', 'CustomerController@logout');
+    Route::post('/refresh', 'CustomerController@refresh');     
 });
 
 Route::group(['prefix' => 'bike'], function () {
@@ -63,7 +69,7 @@ Route::group(['prefix' => 'tag'], function () {
 Route::group(['prefix' => 'search'], function () {
     Route::get('/bike', 'SearchController@searchBike');
     Route::get('/plan', 'SearchController@searchPlan');
-    Route::get('/client', 'SearchController@searchClient');
+    Route::get('/customer', 'SearchController@searchCustomer');
     Route::get('/user', 'SearchController@searchUser');
     Route::get('/tag', 'SearchController@searchTag');
 });
