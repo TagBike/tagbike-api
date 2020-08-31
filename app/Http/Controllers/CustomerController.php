@@ -4,33 +4,36 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Client;
+use App\Customer;
 
-class ClientController extends Controller
+class CustomerController extends Controller
 {
 
-    private $client;
+    private $customer;
     private $loggedUser;
 
-    public function __construct(Client $client){
-        $this->middleware('auth:api');
-        $this->loggedUser = Auth::user();
-        $this->client = $client;
+    public function __construct(Customer $customer){
+        $this->middleware('auth:api', ['except' => ['login', 'unauthorized']]);
+        $this->customer = $customer;
 
+    }
+
+    public function unauthorized() {
+        return response()->json(['error' => 'Não autozidado'], 401);
     }
 
     public function index(){
 
-        $data = $this->client->all();
+        $data = $this->customer->all();
         return response()->json($data);
     }
 
     public function show($id){
 
-        $client = $this->client->find($id);
-        if (! $client) return response()->json('Error!', 404);
+        $customer = $this->customer->find($id);
+        if (! $customer) return response()->json('Error!', 404);
 
-        $data = ['data' => $client];
+        $data = ['data' => $customer];
         return response()->json($data);
     }
 
@@ -53,25 +56,25 @@ class ClientController extends Controller
         $cellphone = $request->input('cellphone');
         $birthday = $request->input('birthday');
 
-        $client = $this->client->find($id);
-        $emailExists = Client::where('email', $email)->count();
+        $customer = $this->customer->find($id);
+        $emailExists = Customer::where('email', $email)->count();
         
 
-        if($client){
+        if($customer){
 
             if(!empty($name)){
-                $client->name = $name;
+                $customer->name = $name;
             }
             if(!empty($cpf)){
-                $client->cpf = $cpf;
+                $customer->cpf = $cpf;
             }
             if(!empty($rg)){
-                $client->rg = $rg;
+                $customer->rg = $rg;
             }
             if(!empty($email)){
-                if($email != $user->email){
+                if($email != $customer->email){
                     if ($emailExists === 0) {
-                        $user->email = $email;
+                        $customer->email = $email;
                     } else {
                         return response()->json("Email já cadastrado", 202); 
                     }
@@ -79,33 +82,33 @@ class ClientController extends Controller
             }
             if(!empty($password)){
                 $hash = password_hash($password, PASSWORD_DEFAULT);
-                $client->password =$hash;
+                $customer->password =$hash;
             }
             if(!empty($gender)){
-                $client->gender = $gender;
+                $customer->gender = $gender;
             }
             if(!empty($cep)){
-                $client->cep = $cep;
+                $customer->cep = $cep;
             }
             if(!empty($uf)){
-                $client->uf = $uf;
+                $customer->uf = $uf;
             }
             if(!empty($city)){
-                $client->city = $city;
+                $customer->city = $city;
             }
             if(!empty($neighborhood)){
-                $client->neighborhood = $neighborhood;
+                $customer->neighborhood = $neighborhood;
             }
             if(!empty($address)){
-                $client->address = $address;
+                $customer->address = $address;
             }
             if(!empty($phone)){
-                $client->phone = $phone;
+                $customer->phone = $phone;
             }
-            $client->complement = $complement;
-            $client->cellphone = $cellphone;
-            $client->birthday = $birthday;
-            $client->update();
+            $customer->complement = $complement;
+            $customer->cellphone = $cellphone;
+            $customer->birthday = $birthday;
+            $customer->update();
                 
             return response()->json('Sucess!', 202);
 
@@ -133,7 +136,7 @@ class ClientController extends Controller
         $cellphone = $request->input('cellphone');
         $birthday = $request->input('birthday');
 
-        $emailExists = Client::where('email', $email)->count();
+        $emailExists = Customer::where('email', $email)->count();
 
         if($name == '') {
             return response()->json('Por favor informe seu nome!');
@@ -154,7 +157,7 @@ class ClientController extends Controller
             return response()->json('Por favor informe sua senha!');
         }
         if($cep == '') {
-            return response()->json('Por favor informe sseu cep!');
+            return response()->json('Por favor informe seu cep!');
         }
         if($uf == '') {
             return response()->json('Por favor informe seu estado!');
@@ -180,25 +183,25 @@ class ClientController extends Controller
             $hash = password_hash($password, PASSWORD_DEFAULT);
             $idUser = Auth::id();
 
-        $newClient = new Client();
-        $newClient->id_user = $idUser;
-        $newClient->name = $name;
-        $newClient->cpf = $cpf;
-        $newClient->rg = $rg;
-        $newClient->email = $email;
-        $newClient->password =$hash;
-        $newClient->gender =$gender;
-        $newClient->cep = $cep;
-        $newClient->uf = $uf;
-        $newClient->city = $city;
-        $newClient->neighborhood = $neighborhood;
-        $newClient->address = $address;
-        $newClient->number = $number;
-        $newClient->complement = $complement;
-        $newClient->phone = $phone;
-        $newClient->cellphone = $cellphone;
-        $newClient->birthday = $birthday;
-        $newClient->save();
+        $newCustomer = new Customer();
+        $newCustomer->id_user = $idUser;
+        $newCustomer->name = $name;
+        $newCustomer->cpf = $cpf;
+        $newCustomer->rg = $rg;
+        $newCustomer->email = $email;
+        $newCustomer->password =$hash;
+        $newCustomer->gender =$gender;
+        $newCustomer->cep = $cep;
+        $newCustomer->uf = $uf;
+        $newCustomer->city = $city;
+        $newCustomer->neighborhood = $neighborhood;
+        $newCustomer->address = $address;
+        $newCustomer->number = $number;
+        $newCustomer->complement = $complement;
+        $newCustomer->phone = $phone;
+        $newCustomer->cellphone = $cellphone;
+        $newCustomer->birthday = $birthday;
+        $newCustomer->save();
 
         return response()->json("Sucess", 202);
 
@@ -208,7 +211,7 @@ class ClientController extends Controller
     }
     
     
-    public function delete(Client $id){
+    public function delete(Customer $id){
         try {
             $id->delete();
 
@@ -220,5 +223,43 @@ class ClientController extends Controller
             }
             return response()->json('Error', 1012);
         }
+    }
+
+
+    public function login(Request $request) {
+        $array = ['error' => ''];
+
+        $email = $request->input('email');
+        $password = $request->input('password');
+
+        if($email && $password) {
+            $token = auth()->attempt([
+                'email' => $email,
+                'password' => $password
+            ]);
+    
+            if(!$token) {
+                return response()->json("E-mail e/ou Senha inválidos"); 
+            }
+    
+            $array['token'] = $token;
+            return $array;
+        } 
+        
+        $array['error'] = 'Dados não informados!';
+        return $array;
+    }
+
+    public function logout() {
+        auth()->logout();
+        return ['error' => ''];
+    }
+
+    public function refresh() {
+        $token = auth()->refresh();
+        return [
+            'error' => '',
+            'token' => $token
+        ];
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Bike;
 use App\User;
+use App\Customer;
 
 class BikeController extends Controller
 {
@@ -14,11 +15,12 @@ class BikeController extends Controller
     private $user;
     private $loggedUser;
 
-    public function __construct(Bike $bike, User $user){
+    public function __construct(Bike $bike, User $user, Customer $customer){
         $this->middleware('auth:api');
         $this->loggedUser = Auth::user();
         $this->bike = $bike;
         $this->user = $user;
+        $this->customer = $customer;
 
     }
 
@@ -74,11 +76,11 @@ class BikeController extends Controller
         
         if ($serialNumberExists === 0) {
 
-        $userId = Auth::user()->id;
+        $customer_id = Auth::user()->id;
 
         $newBike = new Bike();
         $newBike->serialNumber = $serialNumber;
-        $newBike->id_user = $userId;
+        $newBike->customer_id = $customer_id;
         $newBike->biketype = $biketype;
         $newBike->brand = $brand;
         $newBike->model = $model;

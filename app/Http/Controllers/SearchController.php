@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Plan;
 use App\Bike;
-use App\Client;
+use App\Customer;
 use App\Tag;
 use App\User;
 
@@ -56,23 +56,23 @@ class SearchController extends Controller
         
     }
 
-    public function searchClient(Request $request) {
+    public function searchCustomer(Request $request) {
 
         $data = $request->input('data');
 
         if($data){
-            $listClient = Client::where('cpf', 'like', "%{$data}%")
+            $listCustomer = Customer::where('cpf', 'like', "%{$data}%")
             ->orWhere('rg', 'like', "%{$data}%")
             ->orWhere('name', 'like', "%{$data}%")
             ->orWhere('email', 'like', "%{$data}%")
             ->get();
 
         } else {
-            $data = Client::all();
+            $data = Customer::all();
             return response()->json($data);
             
         }
-        return response()->json($listClient);
+        return response()->json($listCustomer);
         
     }
 
