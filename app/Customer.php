@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class Customer implements JWTSubject
+class Customer extends Model implements JWTSubject
 {
     use Notifiable;
     use SoftDeletes;
