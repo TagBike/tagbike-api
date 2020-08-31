@@ -28,7 +28,7 @@ class PlanController extends Controller
     public function show($id){
 
         $plan = $this->plan->find($id);
-        if (! $plan) return response()->json('Plano não encontrado!', 404);
+        if (! $plan) return response()->json('Error!', 404);
 
         $data = ['data' => $plan];
         return response()->json($data);
@@ -53,10 +53,10 @@ class PlanController extends Controller
                 $plan->description = $description;
             }
             $plan->update();
-            return response()->json('Plan update successfully!', 202);
+            return response()->json('Sucess', 202);
 
         } else {
-            return response()->json('error update plan', 412);
+            return response()->json('Error', 412);
         }
     }   
 
@@ -79,9 +79,9 @@ class PlanController extends Controller
             $newPlan->price = $price;
             $newPlan->description = $description;
             $newPlan->save();
-            return response()->json("Plan registered successfully", 202);
+            return response()->json("Sucess", 202);
         } else {
-            return response()->json("Error create Plan", 412);
+            return response()->json("Error", 412);
         }
         
         
@@ -91,13 +91,13 @@ class PlanController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'Plano Excluidor com sucesso!']], 200);
+            return response()->json(['data' => ['msg' => 'Sucess']], 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 return response()->json('Error', 412);
             }
-            return response()->json('Error ao realizar operação de exclusão', 412);
+            return response()->json('Error', 412);
         }
     }
 

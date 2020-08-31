@@ -28,7 +28,7 @@ class ClientController extends Controller
     public function show($id){
 
         $client = $this->client->find($id);
-        if (! $client) return response()->json('Cliente não encontrado!', 404);
+        if (! $client) return response()->json('Error!', 404);
 
         $data = ['data' => $client];
         return response()->json($data);
@@ -107,10 +107,10 @@ class ClientController extends Controller
             $client->birthday = $birthday;
             $client->update();
                 
-            return response()->json('Client update successfully!', 202);
+            return response()->json('Sucess!', 202);
 
         } else {
-            return response()->json('Error update Client!', 400);
+            return response()->json('Error!', 400);
         }
     }
 
@@ -200,7 +200,7 @@ class ClientController extends Controller
         $newClient->birthday = $birthday;
         $newClient->save();
 
-        return response()->json("Client registered successfully", 202);
+        return response()->json("Sucess", 202);
 
         } else {
             return response()->json("Email já cadastrado", 202); 
@@ -212,13 +212,13 @@ class ClientController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'Cliente Excluidor com sucesso!']], 200);
+            return response()->json(['data' => ['msg' => 'Sucess!']], 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json(ApiError::errorMessage($e->getMessage(), 1012));
+                return response()->json('Error', 1012);
             }
-            return response()->json(ApiError::errorMessage('Error ao realizar operação de exclusão', 1012));
+            return response()->json('Error', 1012);
         }
     }
 }

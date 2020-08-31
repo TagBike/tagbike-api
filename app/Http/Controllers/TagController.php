@@ -29,7 +29,7 @@ class TagController extends Controller
     public function show($id){
 
         $tag = $this->tag->find($id);
-        if (! $tag) return response()->json('Tag not foud!', 404);
+        if (! $tag) return response()->json('Error!', 404);
 
         $data = ['data' => $tag];
         return response()->json($data);
@@ -54,7 +54,7 @@ class TagController extends Controller
                 }
                 $tag->update(); 
             
-                return response()->json('Tag update successfully ', 202);
+                return response()->json('Sucess', 202);
 
             } else {
                 $imgName = $tag['qr_img'];
@@ -75,11 +75,11 @@ class TagController extends Controller
                 $tag->qr_img= $uploadImg;
                 $tag->update(); 
 
-                return response()->json('foi aqui 2', 202);
+                return response()->json('Sucess', 202);
             }
 
         } else {
-            return response()->json('Error update', 400);
+            return response()->json('Error', 400);
         }
     } 
 
@@ -109,13 +109,13 @@ class TagController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'Tag delete successfully!']], 200);
+            return response()->json(['data' => ['msg' => 'Sucess']], 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 return response()->json('Error', 1012);
             }
-            return response()->json('Error ao realizar operação de exclusão', 1012);
+            return response()->json('Error', 1012);
         }
     }
 }

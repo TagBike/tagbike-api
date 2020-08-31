@@ -95,7 +95,7 @@ class UserController extends Controller
             
         $array['token'] = $token;
 
-        return response()->json("User registered successfully", 202);
+        return response()->json("Sucess", 202);
 
 
         } else {
@@ -106,7 +106,7 @@ class UserController extends Controller
     public function show($id){
 
         $user = $this->user->find($id);
-        if (! $user) return response()->json('Usuário não encontrado!', 404);
+        if (! $user) return response()->json('Error!', 404);
 
         $data = ['data' => $user];
         return response()->json($data);
@@ -167,10 +167,10 @@ class UserController extends Controller
         
             $user->update();
                 
-            return response()->json('User update successfully!', 202);
+            return response()->json('Sucess!', 202);
 
         } else {
-            return response()->json('Error update user!', 400);
+            return response()->json('Error!', 400);
         }
     }
 
@@ -178,13 +178,13 @@ class UserController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'Usuário Excluidor com sucesso!']], 200);
+            return response()->json(['data' => ['msg' => 'Sucess!']], 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 return response()->json('error');
             }
-            return response()->json('Error ao realizar operação de exclusão');
+            return response()->json('Error');
         }
     }
 }

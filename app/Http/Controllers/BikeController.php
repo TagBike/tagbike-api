@@ -32,7 +32,7 @@ class BikeController extends Controller
     public function show($id){
 
         $bike = $this->bike->find($id);
-        if (! $bike) return response()->json('Bicicleta não encontrado!', 404);
+        if (! $bike) return response()->json('Error', 404);
 
         $data = ['data' => $bike];
         return response()->json($data);
@@ -40,7 +40,6 @@ class BikeController extends Controller
 
     public function create(Request $request) {
 
-        $customerId = $request->input('customer_id');
         $serialNumber = $request->input('serialNumber');
         $biketype = $request->input('biketype');
         $brand = $request->input('brand');
@@ -57,9 +56,6 @@ class BikeController extends Controller
 
         $serialNumberExists = $this->bike->where('serialNumber', $serialNumber)->count();
 
-        if($customerId == '') {
-            return response()->json('Por favor informe o código do proprietário!');
-        }
         if($serialNumber == '') {
             return response()->json('Por favor informe o número de série!');
         }
@@ -78,9 +74,11 @@ class BikeController extends Controller
         
         if ($serialNumberExists === 0) {
 
+        $userId = Auth::user()->id;
+
         $newBike = new Bike();
         $newBike->serialNumber = $serialNumber;
-        $newBike->customer_id = $customerId;
+        $newBike->id_user = $userId;
         $newBike->biketype = $biketype;
         $newBike->brand = $brand;
         $newBike->model = $model;
@@ -95,7 +93,7 @@ class BikeController extends Controller
         $newBike->frametype = $frametype;
         $newBike->save();
 
-        return response()->json("Bike registered successfully", 202);
+        return response()->json("Sucess", 202);
 
         } else {
             return response()->json("Número de série já cadastrado", 400); 
@@ -148,10 +146,10 @@ class BikeController extends Controller
                 $bike->frametype = $frametype;
                 $bike->update();
 
-                return response()->json("success", 202);
+                return response()->json("Sucess", 202);
 
             } else {
-                return response()->json('error', 400);
+                return response()->json('Error', 400);
             }
     }    
 
@@ -159,13 +157,13 @@ class BikeController extends Controller
         try {
             $id->delete();
 
-            return response()->json('Bicicleta Excluída com sucesso!', 200);
+            return response()->json('Sucess', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 return response()->json('error', 1012);
             }
-            return response()->json('Error ao realizar operação de exclusão', 1012);
+            return response()->json('Error', 1012);
         }
     }
 }
