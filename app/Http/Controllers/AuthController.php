@@ -118,7 +118,7 @@ class AuthController extends Controller
 
 
 
-            return response()->json("Sucess", 202);
+            return response()->json("success", 202);
 
 
             if(!$token) {

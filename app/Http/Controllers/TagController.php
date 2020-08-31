@@ -29,7 +29,7 @@ class TagController extends Controller
     public function show($id){
 
         $tag = $this->tag->find($id);
-        if (! $tag) return response()->json('Error!', 404);
+        if (! $tag) return response()->json('error!', 404);
 
         $data = ['data' => $tag];
         return response()->json($data);
@@ -54,7 +54,7 @@ class TagController extends Controller
                 }
                 $tag->update(); 
             
-                return response()->json('Sucess', 202);
+                return response()->json('success', 202);
 
             } else {
                 $imgName = $tag['qr_img'];
@@ -75,11 +75,11 @@ class TagController extends Controller
                 $tag->qr_img= $uploadImg;
                 $tag->update(); 
 
-                return response()->json('Sucess', 202);
+                return response()->json('success', 202);
             }
 
         } else {
-            return response()->json('Error', 400);
+            return response()->json('error', 400);
         }
     } 
 
@@ -101,7 +101,7 @@ class TagController extends Controller
         $newTag->qr_code = $qrCode;
         // $newTag->qr_img = $uploadImg;
         $newTag->save();
-        return response()->json("sucess");
+        return response()->json("success");
        
     }
     
@@ -109,13 +109,13 @@ class TagController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'Sucess']], 200);
+            return response()->json(['data' => ['msg' => 'success']], 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json('Error', 1012);
+                return response()->json('error', 1012);
             }
-            return response()->json('Error', 1012);
+            return response()->json('error', 1012);
         }
     }
 }

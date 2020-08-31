@@ -34,7 +34,7 @@ class BikeController extends Controller
     public function show($id){
 
         $bike = $this->bike->find($id);
-        if (! $bike) return response()->json('Error', 404);
+        if (! $bike) return response()->json('error', 404);
 
         $data = ['data' => $bike];
         return response()->json($data);
@@ -95,7 +95,7 @@ class BikeController extends Controller
         $newBike->frametype = $frametype;
         $newBike->save();
 
-        return response()->json("Sucess", 202);
+        return response()->json("success", 202);
 
         } else {
             return response()->json("Número de série já cadastrado", 400); 
@@ -148,10 +148,10 @@ class BikeController extends Controller
                 $bike->frametype = $frametype;
                 $bike->update();
 
-                return response()->json("Sucess", 202);
+                return response()->json("success", 202);
 
             } else {
-                return response()->json('Error', 400);
+                return response()->json('error', 400);
             }
     }    
 
@@ -159,13 +159,13 @@ class BikeController extends Controller
         try {
             $id->delete();
 
-            return response()->json('Sucess', 200);
+            return response()->json('success', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 return response()->json('error', 1012);
             }
-            return response()->json('Error', 1012);
+            return response()->json('error', 1012);
         }
     }
 }
