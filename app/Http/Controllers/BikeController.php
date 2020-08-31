@@ -26,8 +26,7 @@ class BikeController extends Controller
 
     public function index(){
         
-        $userId = Auth::user()->id;
-        $data = $this->bike->with('user')->where('id_user', $userId)->get();
+        $data = $this->bike->get();
         return response()->json($data);
     }
 
