@@ -18,12 +18,12 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('uf', 60);
-            $table->string('city', 100);
-            $table->string('cellphone', 15);
-            $table->string('cpf', 11);
-            $table->date('birthday');
-            $table->tinyInteger('sexy');
+            $table->string('uf', 60)->nullable();
+            $table->string('city', 100)->nullable();
+            $table->string('cellphone', 15)->nullable();
+            $table->string('cpf', 11)->nullable();
+            $table->date('birthday')->nullable();
+            $table->tinyInteger('sexy')->nullable();
             $table->string('token')->nullable();
             $table->timestamps();
             $table->softDeletes();

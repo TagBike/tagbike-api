@@ -48,54 +48,36 @@ class UserController extends Controller
         if($password == '') {
             return response()->json('Por favor informe sua senha!');
         }
-        if($uf == '') {
-            return response()->json('Por favor informe seu estado!');
-        }
-        if($city == '') {
-            return response()->json('Por favor informe sua cidade!');
-        }
-        if($cellphone == '') {
-            return response()->json('Por favor informe seu numéro de celular!');
-        }
-        if($cpf == '') {
-            return response()->json('Por favor informe seu cpf!');
-        }
-        if($birthday == '') {
-            return response()->json('Por favor informe seu data de nascimento!');
-        }
-        if($sexy == '') {
-            return response()->json('Por favor informe seu Sexo!');
-        }
         
         if ($emailExists === 0) {
 
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $newUser = new User();
-        $newUser->name = $name;
-        $newUser->email = $email;
-        $newUser->password = $hash;
-        $newUser->uf = $uf;
-        $newUser->city = $city;
-        $newUser->cellphone = $cellphone;
-        $newUser->cpf = $cpf;
-        $newUser->birthday = $birthday;
-        $newUser->sexy = $sexy;
-        $newUser->save();
+            $newUser = new User();
+            $newUser->name = $name;
+            $newUser->email = $email;
+            $newUser->password = $hash;
+            $newUser->uf = $uf;
+            $newUser->city = $city;
+            $newUser->cellphone = $cellphone;
+            $newUser->cpf = $cpf;
+            $newUser->birthday = $birthday;
+            $newUser->sexy = $sexy;
+            $newUser->save();
 
 
-        $token = Auth()->attempt([
-            'email' => $email,
-            'password'=> $password
-        ]);
+            $token = Auth()->attempt([
+                'email' => $email,
+                'password'=> $password
+            ]);
 
-        if(!$token) {
-            return response()->json("erro token invalid", 202);
-        } 
-            
-        $array['token'] = $token;
+            if(!$token) {
+                return response()->json("erro token invalid", 202);
+            } 
+                
+            $array['token'] = $token;
 
-        return response()->json("success", 202);
+            return response()->json("success", 202);
 
 
         } else {
