@@ -12,7 +12,7 @@ Route::post('/401', 'AuthController@unauthorized')->name('login');
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', 'AuthController@login');
     Route::post('/logout', 'AuthController@logout');
-    Route::post('/refresh', 'AuthController@refresh');     
+    Route::post('/refresh', 'AuthController@refresh');      
 });
 
 
@@ -73,4 +73,11 @@ Route::group(['prefix' => 'search'], function () {
     Route::get('/user', 'SearchController@searchUser');
     Route::get('/tag', 'SearchController@searchTag');
 });
+
+Route::group(['prefix' => 'password'], function () {
+    Route::post('/email', 'ForgotPasswordController@forgot');
+    Route::post('/reset', 'ForgotPasswordController@reset');
+});
+
+
 
