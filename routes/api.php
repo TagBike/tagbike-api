@@ -74,8 +74,8 @@ Route::group(['prefix' => 'search'], function () {
     Route::get('/tag', 'SearchController@searchTag');
 });
 
-Route::group(['prefix' => 'password'], function () {
-    Route::post('/email', 'ForgotPasswordController@forgot');
+Route::group(['prefix' => 'reset-password'], function () {
+    Route::post('/', 'ForgotPasswordController@emailRequest');
     Route::post('/reset', 'ForgotPasswordController@reset');
 });
 

@@ -3,19 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\ResetPasswordRequest;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Password;
+use App\User;
 
 class ForgotPasswordController extends Controller
 {
-    public function forgot() {
-        $credentials = request()->validate(['email' => 'required|email']);
+    public function emailRequest(Request $request) {
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $token = Str::random(60);
 
-        Password::sendResetLink($credentials);
+        $idUser = User::where('email', $email)->get();
+    
+        $user = User::find($idUser[0]['id']);
 
-        return response()->json(["msg" => 'Reset password link sent on your email id.']);
+        if($user) {
+            $user->activation_token = $token;
+            $user->update();
+
+            Mail::send('auth.reset_password', ['name' => $name, 'token' =>$token], function ($message) use ($email, $name) {
+                $message->from('suporte@tagbike.com.br', 'Tag Bike')
+                    ->to($email, $name)
+                    ->subject('Tag Bike - Solicitação de redefinição de senha');
+            });
+                return response()->json('E-mail enviado com sucesso');
+        } else {
+            return response()->json('error', 400);
+        }
     }
-
 
     public function reset() {
         $credentials = request()->validate([
