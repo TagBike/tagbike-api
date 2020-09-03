@@ -75,8 +75,9 @@ Route::group(['prefix' => 'search'], function () {
 });
 
 Route::group(['prefix' => 'reset-password'], function () {
-    Route::post('/', 'ForgotPasswordController@emailRequest');
-    Route::post('/reset', 'ForgotPasswordController@reset');
+    Route::post('/', 'ForgotPasswordController@emailRequest'); //Envia solicitação de reset se senha.
+    Route::get('/{token}',      'ForgotPasswordController@find'); //Valida Token recebido no email.
+    Route::post('/reset', 'ForgotPasswordController@reset');//Recebe os novos dados para o reset de senha.    
 });
 
 
