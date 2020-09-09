@@ -105,6 +105,37 @@ class CustomerController extends Controller
             if(!empty($phone)){
                 $customer->phone = $phone;
             }
+            if(!empty($referral_hospital)){
+                $customer->referral_hospital = $referral_hospital;
+            }
+            if(!empty($observations)){
+                $customer->observations = $observations;
+            }
+            if(!empty($emergency_contacts)){
+                $customer->emergency_contacts = $emergency_contacts;
+            }
+            if(!empty($doctor)){
+                $customer->doctor = $doctor;
+            }
+            if(!empty($bloodtype)){
+                $customer->bloodtype = $bloodtype;
+            }
+            if(!empty($allergic_reactions)){
+                $customer->allergic_reactions = $allergic_reactions;
+            }
+            if(!empty($additional_notes)){
+                $customer->additional_notes = $additional_notes;
+            }
+
+            if(!empty($insurance)){
+                $customer->insurance = $insurance;
+            }
+            if(!empty($insurance_number)){
+                $customer->insurance_number = $insurance_number;
+            }
+
+        
+
             $customer->complement = $complement;
             $customer->cellphone = $cellphone;
             $customer->birthday = $birthday;

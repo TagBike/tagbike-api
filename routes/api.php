@@ -36,6 +36,14 @@ Route::group(['prefix' => 'customer'], function () {
     Route::delete('/delete/{id}', 'CustomerController@delete');
 });
 
+Route::group(['prefix' => 'medical'], function () {
+    Route::get('/', 'CustomerMedicalController@index');
+    Route::post('/create', 'CustomerMedicalController@create');
+    Route::get('/{id}', 'CustomerMedicalController@show');
+    Route::put('/update/{id}', 'CustomerMedicalController@update');
+    Route::delete('/delete/{id}', 'CustomerMedicalController@delete');
+});
+
 Route::group(['prefix' => 'authCustomer'], function () {
     Route::post('/login', 'CustomerController@login');
     Route::post('/logout', 'CustomerController@logout');

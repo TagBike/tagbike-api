@@ -1,0 +1,52 @@
+version: "3"
+services:
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: "@TagBike#2020"
+      MYSQL_DATABASE: tagb
+      MYSQL_USER: tagb
+      MYSQL_PASSWORD: "@TagBike#2020"
+    ports:
+      - "3306:3306"
+    networks:
+      - tagb-net
+
+  api:
+    container_name: api
+    build: .
+    depends_on:
+      - db
+    external_links:
+      - db:mysql
+    volumes:
+      - ./:/app
+    ports:
+      - "80:80"
+    stdin_open: true
+    tty: true
+    networks:
+      - tagb-net
+
+  phpmyadmin:
+    container_name: pma
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    external_links:
+      - db:mysql
+    ports:
+      - "9191:80"
+    environment:
+      MYSQL_USER: tagb
+      MYSQL_ROOT_PASSWORD: "@TagBike#2020"
+      MYSQL_DATABASE: tagb
+      MYSQL_PASSWORD: "@TagBike#2020"
+      PMA_HOST: db
+    networks:
+      - tagb-net
+networks:
+  tagb-net:
+    driver: bridge
