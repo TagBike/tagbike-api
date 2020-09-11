@@ -18,7 +18,7 @@ class CustomerController extends Controller
     }
 
     public function unauthorized() {
-        return response()->json(['error' => 'Não autozidado'], 401);
+        return response()->json(['error' => 'Não autorizado'], 401);
     }
 
     public function index(){
