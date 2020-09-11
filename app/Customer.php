@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
+use App\Bike;
+
 class Customer extends Model implements JWTSubject
 {
     use Notifiable;
@@ -22,5 +24,9 @@ class Customer extends Model implements JWTSubject
 
     public function getJWTCustomClaims() {
         return [];
+    }
+
+    public function bikes($id) {
+        return Bike::where('customer_id', '=',$id);
     }
 }

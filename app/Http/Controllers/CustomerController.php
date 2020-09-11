@@ -15,7 +15,6 @@ class CustomerController extends Controller
     public function __construct(Customer $customer){
         $this->middleware('auth:api', ['except' => ['login', 'unauthorized']]);
         $this->customer = $customer;
-
     }
 
     public function unauthorized() {
@@ -254,6 +253,13 @@ class CustomerController extends Controller
             }
             return response()->json('error', 1012);
         }
+    }
+
+
+    public function bikes($id){
+        $bikes = $this->customer->bikes($id)->get();
+        if (! $bikes) return response()->json('error!', 404);
+        return response()->json($bikes);
     }
 
 

@@ -34,6 +34,7 @@ Route::group(['prefix' => 'customer'], function () {
     Route::get('/{id}', 'CustomerController@show');
     Route::put('/update/{id}', 'CustomerController@update');
     Route::delete('/delete/{id}', 'CustomerController@delete');
+    Route::get('/{id}/bikes', 'CustomerController@bikes');
 });
 
 Route::group(['prefix' => 'medical'], function () {
