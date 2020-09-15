@@ -228,8 +228,24 @@ class CustomerController extends Controller
 
     public function bikes($id){
         $bikes = $this->customer->bikes($id)->get();
-        if (! $bikes) return response()->json('error!', 404);
+        if (! $bikes) return response()->json('error', 404);
         return response()->json($bikes);
+    }
+
+    public function events($id){
+        $events = $this->customer->events($id)
+            ->join('event_types', 'events.eventType', '=', 'event_types.id')
+            ->join('customers', 'events.ownerId', '=', 'customers.id')
+            ->select(
+                'events.*',
+                'event_types.name as eventName', 
+                'event_types.key as eventKey',
+                'customers.name as customerName'
+            )
+            ->where('events.ownerId', '=', $id)
+            ->get();
+        if (! $events) return response()->json('error', 404);
+        return response()->json($events);
     }
 
 

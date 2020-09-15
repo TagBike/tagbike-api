@@ -80,6 +80,47 @@ class EventController extends Controller
 
     } 
 
+    public function update(Request $request, $id) {
+
+        $ownerId = $request->input('ownerId');
+        $eventType = $request->input('eventType');
+        $createdBy = $request->input('createdBy');
+        $data = $request->input('data');
+        $eventTime = $request->input('eventTime');         
+
+        $event = $this->event->find($id);
+        if($event) {
+
+            if(!empty($ownerId)) {
+                $event->ownerId = $ownerId;
+            }
+    
+            if(!empty($eventType)) {
+                $event->eventType = $eventType;
+            }
+    
+            if(!empty($createdBy)) {
+                $event->createdBy = $createdBy;
+            }
+
+            if(!empty($data)) {
+                $event->data = $data;
+            }
+
+            if(!empty($eventTime)) {
+                $event->eventTime = $eventTime;
+            }
+            
+            $event->update();
+    
+            return response()->json("success", 202);
+        } else {
+            return response()->json('error', 400);
+        }
+       
+
+    } 
+
     public function read_types() {
         $data = $this->event->types()->all();
         return response()->json($data);
