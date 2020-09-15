@@ -83,6 +83,20 @@ Route::group(['prefix' => 'search'], function () {
     Route::get('/tag', 'SearchController@searchTag');
 });
 
+Route::group(['prefix' => 'event'], function () {
+    Route::get('/types', 'EventController@read_types');
+    Route::post('/types', 'EventController@create_type');
+    Route::get('/types/{id}', 'EventController@show_type');
+    Route::put('/types/{id}', 'EventController@update_type');
+    Route::delete('/types/{id}', 'EventController@delete_type');
+
+    Route::get('/', 'EventController@index');
+    Route::post('/create', 'EventController@create');
+    Route::get('/{id}', 'EventController@show');
+    Route::put('/update/{id}', 'EventController@update');
+    Route::delete('/delete/{id}', 'EventController@delete');
+});
+
 Route::group(['prefix' => 'reset-password'], function () {
     Route::post('/', 'ForgotPasswordController@emailRequest'); //Envia solicitação de reset se senha.
     Route::get('/{token}',      'ForgotPasswordController@find'); //Valida Token recebido no email.

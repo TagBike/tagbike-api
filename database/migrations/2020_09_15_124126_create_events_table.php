@@ -16,11 +16,19 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('ownerId');
-            $table->string('groupId');
             $table->string('eventType');
-            $table->string('createdBy');
-            $table->text('data');
-            $table->string('eventTime'); 
+            $table->string('createdBy')->nullable();
+            $table->text('data')->nullable();
+            $table->string('eventTime')->nullable(); 
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('event_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('key');
+            $table->string('parentType')->default('0');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -34,5 +42,6 @@ class CreateEventsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('events');
+        Schema::dropIfExists('event_types');
     }
 }
