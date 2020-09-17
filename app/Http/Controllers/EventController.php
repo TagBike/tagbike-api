@@ -156,9 +156,9 @@ class EventController extends Controller
         $model->key = $key;
         $model->parentType = $parentType;
         
-        $model->update();
+        $model->save();
 
-        return response()->json("successs", 202);
+        return response()->json("success", 202);
 
     } 
 
