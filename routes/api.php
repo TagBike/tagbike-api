@@ -34,6 +34,16 @@ Route::group(['prefix' => 'customer'], function () {
     Route::get('/{id}', 'CustomerController@show');
     Route::put('/update/{id}', 'CustomerController@update');
     Route::delete('/delete/{id}', 'CustomerController@delete');
+    Route::get('/{id}/bikes', 'CustomerController@bikes');
+    Route::get('/{id}/events', 'CustomerController@events');
+});
+
+Route::group(['prefix' => 'medical'], function () {
+    Route::get('/', 'CustomerMedicalController@index');
+    Route::post('/create', 'CustomerMedicalController@create');
+    Route::get('/{id}', 'CustomerMedicalController@show');
+    Route::put('/update/{id}', 'CustomerMedicalController@update');
+    Route::delete('/delete/{id}', 'CustomerMedicalController@delete');
 });
 
 Route::group(['prefix' => 'authCustomer'], function () {
@@ -72,6 +82,20 @@ Route::group(['prefix' => 'search'], function () {
     Route::get('/customer', 'SearchController@searchCustomer');
     Route::get('/user', 'SearchController@searchUser');
     Route::get('/tag', 'SearchController@searchTag');
+});
+
+Route::group(['prefix' => 'event'], function () {
+    Route::get('/types', 'EventController@read_types');
+    Route::post('/types', 'EventController@create_type');
+    Route::get('/types/{id}', 'EventController@show_type');
+    Route::put('/types/{id}', 'EventController@update_type');
+    Route::delete('/types/{id}', 'EventController@delete_type');
+
+    Route::get('/', 'EventController@index');
+    Route::post('/create', 'EventController@create');
+    Route::get('/{id}', 'EventController@show');
+    Route::put('/update/{id}', 'EventController@update');
+    Route::delete('/delete/{id}', 'EventController@delete');
 });
 
 Route::group(['prefix' => 'reset-password'], function () {

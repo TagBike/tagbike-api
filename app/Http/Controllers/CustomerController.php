@@ -15,11 +15,10 @@ class CustomerController extends Controller
     public function __construct(Customer $customer){
         $this->middleware('auth:api', ['except' => ['login', 'unauthorized']]);
         $this->customer = $customer;
-
     }
 
     public function unauthorized() {
-        return response()->json(['error' => 'Não autozidado'], 401);
+        return response()->json(['error' => 'Não autorizado'], 401);
     }
 
     public function index(){
@@ -104,7 +103,8 @@ class CustomerController extends Controller
             }
             if(!empty($phone)){
                 $customer->phone = $phone;
-            }
+            }        
+
             $customer->complement = $complement;
             $customer->cellphone = $cellphone;
             $customer->birthday = $birthday;
@@ -223,6 +223,29 @@ class CustomerController extends Controller
             }
             return response()->json('error', 1012);
         }
+    }
+
+
+    public function bikes($id){
+        $bikes = $this->customer->bikes($id)->get();
+        if (! $bikes) return response()->json('error', 404);
+        return response()->json($bikes);
+    }
+
+    public function events($id){
+        $events = $this->customer->events($id)
+            ->join('event_types', 'events.eventType', '=', 'event_types.id')
+            ->join('customers', 'events.ownerId', '=', 'customers.id')
+            ->select(
+                'events.*',
+                'event_types.name as eventName', 
+                'event_types.key as eventKey',
+                'customers.name as customerName'
+            )
+            ->where('events.ownerId', '=', $id)
+            ->get();
+        if (! $events) return response()->json('error', 404);
+        return response()->json($events);
     }
 
 
