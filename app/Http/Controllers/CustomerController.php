@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Customer;
+use App\User;
+use App\Event;
 
 class CustomerController extends Controller
 {
 
     private $customer;
+    private $event;
+    private $user;
     private $loggedUser;
 
     public function __construct(Customer $customer){
         $this->middleware('auth:api', ['except' => ['login', 'unauthorized']]);
         $this->customer = $customer;
+        $this->event = new Event();
+        $this->user = new User();
     }
 
     public function unauthorized() {
@@ -109,7 +116,18 @@ class CustomerController extends Controller
             $customer->cellphone = $cellphone;
             $customer->birthday = $birthday;
             $customer->update();
-                
+            $eventData = [
+                'userId' => Auth::id(),
+                'customerId' => $customer->id
+            ];
+
+            Event::register([
+                'ownerId' => $customer->id,
+                'eventType' => 'event.action.user.customer.account.update',
+                'createdBy' => Auth::id(),
+                'data' => json_encode($eventData)
+                ]);
+
             return response()->json('success!', 202);
 
         } else {
@@ -202,6 +220,18 @@ class CustomerController extends Controller
         $newCustomer->cellphone = $cellphone;
         $newCustomer->birthday = $birthday;
         $newCustomer->save();
+        
+
+        Event::register([
+            'ownerId' => $newCustomer->id,
+            'eventType' => 'event.action.user.customer.account.new',
+            'createdBy' => Auth::id(),
+            'data' => json_encode([
+                'userId' => Auth::id(),
+                'customerId' => $newCustomer->id
+            ])
+            ]);
+
 
         return response()->json("success", 202);
 
@@ -214,6 +244,16 @@ class CustomerController extends Controller
     public function delete(Customer $id){
         try {
             $id->delete();
+
+            Event::register([
+                'ownerId' => $id,
+                'eventType' => 'event.action.user.customer.account.delete',
+                'createdBy' => Auth::id(),
+                'data' => json_encode([
+                    'userId' => Auth::id(),
+                    'customerId' => $id
+                ])
+            ]);
 
             return response()->json(['data' => ['msg' => 'success!']], 200);
 
@@ -233,19 +273,27 @@ class CustomerController extends Controller
     }
 
     public function events($id){
-        $events = $this->customer->events($id)
-            ->join('event_types', 'events.eventType', '=', 'event_types.id')
-            ->join('customers', 'events.ownerId', '=', 'customers.id')
+        $data = $this->customer->events($id)
             ->select(
                 'events.*',
                 'event_types.name as eventName', 
                 'event_types.key as eventKey',
-                'customers.name as customerName'
+                'customers.name as customerName',
+                'data->userId as userId',
+                'data->bikeId as bikeId',
+                'users.name as userName',
             )
+            ->join('event_types', 'events.eventType', '=', 'event_types.id')
+            ->leftJoin('customers', 'events.ownerId', '=', 'customers.id')
+            ->leftJoin('users', 'data->userId', '=', 'users.id')
+            ->leftJoin('bikes', 'data->bikeId', '=', 'bikes.id')
+            
             ->where('events.ownerId', '=', $id)
             ->get();
-        if (! $events) return response()->json('error', 404);
-        return response()->json($events);
+
+        
+        if (! $data) return response()->json('error', 404);
+        return response()->json($data);
     }
 
 
@@ -266,10 +314,13 @@ class CustomerController extends Controller
             }
     
             $array['token'] = $token;
+            
             return $array;
         } 
         
         $array['error'] = 'Dados não informados!';
+
+
         return $array;
     }
 
