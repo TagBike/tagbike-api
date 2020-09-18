@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Bike;
 use App\User;
 use App\Customer;
+use App\Event;
 
 class BikeController extends Controller
 {
@@ -42,6 +43,7 @@ class BikeController extends Controller
     public function create(Request $request) {
 
         $serialNumber = $request->input('serialNumber');
+        $customer_id = $request->input('customer_id');
         $biketype = $request->input('biketype');
         $brand = $request->input('brand');
         $model = $request->input('model');
@@ -75,26 +77,37 @@ class BikeController extends Controller
         
         if ($serialNumberExists === 0) {
 
-        $customer_id = Auth::user()->id;
+            $userId = Auth::user()->id;
 
-        $newBike = new Bike();
-        $newBike->serialNumber = $serialNumber;
-        $newBike->customer_id = $customer_id;
-        $newBike->biketype = $biketype;
-        $newBike->brand = $brand;
-        $newBike->model = $model;
-        $newBike->color = $color;
-        $newBike->photoBike = $photoBike;
-        $newBike->forwardExchange = $forwardExchange;
-        $newBike->rearDerailleur = $rearDerailleur;
-        $newBike->brakeType = $brakeType;
-        $newBike->typeSuspension = $typeSuspension;
-        $newBike->wheelType = $wheelType;
-        $newBike->forkType = $forkType;
-        $newBike->frametype = $frametype;
-        $newBike->save();
+            $newBike = new Bike();
+            $newBike->serialNumber = $serialNumber;
+            $newBike->customer_id = $customer_id;
+            $newBike->biketype = $biketype;
+            $newBike->brand = $brand;
+            $newBike->model = $model;
+            $newBike->color = $color;
+            $newBike->photoBike = $photoBike;
+            $newBike->forwardExchange = $forwardExchange;
+            $newBike->rearDerailleur = $rearDerailleur;
+            $newBike->brakeType = $brakeType;
+            $newBike->typeSuspension = $typeSuspension;
+            $newBike->wheelType = $wheelType;
+            $newBike->forkType = $forkType;
+            $newBike->frametype = $frametype;
+            $newBike->save();
 
-        return response()->json("success", 202);
+            Event::register([
+                'ownerId' => $customer_id,
+                'eventType' => 'event.action.user.customer.bike.add',
+                'createdBy' => Auth::id(),
+                'data' => json_encode([
+                    'userId' => Auth::id(),
+                    'customerId' => $customer_id,
+                    'bikeId' => $newBike->id
+                ])
+            ]);
+
+            return response()->json("success", 202);
 
         } else {
             return response()->json("Número de série já cadastrado", 400); 
@@ -119,46 +132,71 @@ class BikeController extends Controller
 
         $bike = $this->bike->find($id);
 
-            if($bike){ 
+        if($bike){ 
 
-                if(!empty($serialNumber)){
-                    $bike->serialNumber = $serialNumber;
-                }
-                if(!empty($biketype)){
-                    $bike->biketype = $biketype;
-                }
-                if(!empty($brand)){
-                    $bike->brand = $brand;
-                }
-                if(!empty($model)){
-                    $bike->model = $model;
-                }
-                if(!empty($color)){
-                    $bike->color = $color;
-                }
-               
-                $bike->photoBike = $photoBike;
-                $bike->forwardExchange = $forwardExchange;
-                $bike->rearDerailleur = $rearDerailleur;
-                $bike->brakeType = $brakeType;
-                $bike->typeSuspension = $typeSuspension;
-                $bike->wheelType = $wheelType;
-                $bike->forkType = $forkType;
-                $bike->frametype = $frametype;
-                $bike->update();
-
-                return response()->json("success", 202);
-
-            } else {
-                return response()->json('error', 400);
+            if(!empty($serialNumber)){
+                $bike->serialNumber = $serialNumber;
             }
+            if(!empty($biketype)){
+                $bike->biketype = $biketype;
+            }
+            if(!empty($brand)){
+                $bike->brand = $brand;
+            }
+            if(!empty($model)){
+                $bike->model = $model;
+            }
+            if(!empty($color)){
+                $bike->color = $color;
+            }
+            
+            $bike->photoBike = $photoBike;
+            $bike->forwardExchange = $forwardExchange;
+            $bike->rearDerailleur = $rearDerailleur;
+            $bike->brakeType = $brakeType;
+            $bike->typeSuspension = $typeSuspension;
+            $bike->wheelType = $wheelType;
+            $bike->forkType = $forkType;
+            $bike->frametype = $frametype;
+            $bike->update();
+
+            Event::register([
+                'ownerId' => $bike->customer_id,
+                'eventType' => 'event.action.user.customer.bike.update',
+                'createdBy' => Auth::id(),
+                'data' => json_encode([
+                    'userId' => Auth::id(),
+                    'customerId' => $bike->customer_id,
+                    'bikeId' => $bike->id
+                ])
+            ]);
+
+            return response()->json("success", 202);
+
+        } else {
+            return response()->json('error', 400);
+        }
     }    
 
-    public function delete(Bike $id){
+    public function delete(Request $response, $id){
         try {
-            $id->delete();
+            $bike = $this->bike->find($id);
+            $data = $bike->first();
+            
+            Event::register([
+                'ownerId' => $data->customer_id,
+                'eventType' => 'event.action.user.customer.bike.archive',
+                'createdBy' => Auth::id(),
+                'data' => json_encode([
+                    'userId' => Auth::id(),
+                    'customerId' => $data->customer_id,
+                    'bikeId' => $id
+                ])
+            ]);
 
-            return response()->json('success', 200);
+            $bike->delete();
+
+            return response()->json('successs', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
