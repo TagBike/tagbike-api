@@ -18,9 +18,9 @@ class CreateEventsTable extends Migration
             $table->string('ownerId');
             $table->string('eventType');
             $table->string('createdBy')->nullable();
-            $table->text('data')->nullable();
+            $table->json('data')->nullable();
             $table->string('eventTime')->nullable(); 
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
             $table->softDeletes();
         });
 
