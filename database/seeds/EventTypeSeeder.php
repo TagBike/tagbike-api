@@ -31,6 +31,10 @@ class EventTypeSeeder extends Seeder
                 "event.action.user.customer.account.new",
                 "event.action.user.customer.account.update",
                 "event.action.user.customer.account.resetpassword",
+                "event.action.user.customer.bike.add",
+                "event.action.user.customer.bike.archive",
+                "event.action.user.customer.bike.update",
+                "event.action.user.customer.bike.changeproperty",
                 "event.action.user.account.new",
                 "event.action.user.account.update",
                 "event.action.user.account.resetpassword",
@@ -38,7 +42,7 @@ class EventTypeSeeder extends Seeder
                 "event.system.administration.customer.blockedaccount.reason",
                 "event.log.customer.web.access",
                 "event.log.customer.web.app.android",
-                "event.log.customer.web.app.ios",               
+                "event.log.customer.web.app.ios"              
             ];
             $arrEventKeys = [
                 "event.action.administration.customer.account.created",
@@ -58,6 +62,10 @@ class EventTypeSeeder extends Seeder
                 "event.action.user.customer.account.new",
                 "event.action.user.customer.account.update",
                 "event.action.user.customer.account.resetpassword",
+                "event.action.user.customer.bike.add",
+                "event.action.user.customer.bike.archive",
+                "event.action.user.customer.bike.update",
+                "event.action.user.customer.bike.changeproperty",
                 "event.action.user.account.new",
                 "event.action.user.account.update",
                 "event.action.user.account.resetpassword",
@@ -65,8 +73,7 @@ class EventTypeSeeder extends Seeder
                 "event.system.administration.customer.blockedaccount.reason",
                 "event.log.customer.web.access",
                 "event.log.customer.web.app.android",
-                "event.log.customer.web.app.ios",
-                   
+                "event.log.customer.web.app.ios"
             ];
             $arrEvent = array_map(null, $arrEventNames, $arrEventKeys);
 
