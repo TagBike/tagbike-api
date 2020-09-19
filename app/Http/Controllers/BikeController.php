@@ -196,7 +196,7 @@ class BikeController extends Controller
 
             $bike->delete();
 
-            return response()->json('successs', 200);
+            return response()->json('success', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {

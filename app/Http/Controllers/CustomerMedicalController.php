@@ -159,7 +159,7 @@ class CustomerMedicalController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'success']], 200);
+            return response()->json('success', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {

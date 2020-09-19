@@ -29,7 +29,7 @@ class TagController extends Controller
     public function show($id){
 
         $tag = $this->tag->find($id);
-        if (! $tag) return response()->json('error!', 404);
+        if (! $tag) return response()->json('error', 404);
 
         $data = ['data' => $tag];
         return response()->json($data);
@@ -109,7 +109,7 @@ class TagController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'success']], 200);
+            return response()->json('success', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {

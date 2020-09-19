@@ -88,7 +88,7 @@ class UserController extends Controller
     public function show($id){
 
         $user = $this->user->find($id);
-        if (! $user) return response()->json('error!', 404);
+        if (! $user) return response()->json('error', 404);
 
         $data = ['data' => $user];
         return response()->json($data);
@@ -149,10 +149,10 @@ class UserController extends Controller
         
             $user->update();
                 
-            return response()->json('success!', 202);
+            return response()->json('success', 202);
 
         } else {
-            return response()->json('error!', 400);
+            return response()->json('error', 400);
         }
     }
 
@@ -160,7 +160,7 @@ class UserController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'success!']], 200);
+            return response()->json('success', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {

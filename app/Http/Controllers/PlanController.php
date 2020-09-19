@@ -28,7 +28,7 @@ class PlanController extends Controller
     public function show($id){
 
         $plan = $this->plan->find($id);
-        if (! $plan) return response()->json('error!', 404);
+        if (! $plan) return response()->json('error', 404);
 
         $data = ['data' => $plan];
         return response()->json($data);
@@ -91,7 +91,7 @@ class PlanController extends Controller
         try {
             $id->delete();
 
-            return response()->json(['data' => ['msg' => 'success']], 200);
+            return response()->json('success', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {

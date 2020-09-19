@@ -37,7 +37,7 @@ class CustomerController extends Controller
     public function show($id){
 
         $customer = $this->customer->find($id);
-        if (! $customer) return response()->json('error!', 404);
+        if (! $customer) return response()->json('error', 404);
 
         $data = ['data' => $customer];
         return response()->json($data);
@@ -128,10 +128,10 @@ class CustomerController extends Controller
                 'data' => json_encode($eventData)
                 ]);
 
-            return response()->json('success!', 202);
+            return response()->json('success', 202);
 
         } else {
-            return response()->json('error!', 400);
+            return response()->json('error', 400);
         }
     }
 
@@ -255,7 +255,7 @@ class CustomerController extends Controller
                 ])
             ]);
 
-            return response()->json(['data' => ['msg' => 'success!']], 200);
+            return response()->json('success', 200);
 
         } catch (\Exception $e) {
             if (config('app.debug')) {
