@@ -138,7 +138,7 @@ class CustomerMedicalController extends Controller
             $medicalData->referral_hospital = $referral_hospital;
             $medicalData->observations = $observations;
             $medicalData->emergency_contacts = $emergency_contacts;
-            $medicalData->doctor = $doctor;
+            $medicalData->doctor = json_encode($doctor);
             $medicalData->bloodtype = $bloodtype;
             $medicalData->allergic_reactions =$allergic_reactions;
             $medicalData->medicines = $medicines;

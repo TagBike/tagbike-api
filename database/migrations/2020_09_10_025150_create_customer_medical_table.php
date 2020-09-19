@@ -19,7 +19,7 @@ class CreateCustomerMedicalTable extends Migration
             $table->string('referral_hospital')->nullable();
             $table->string('observations')->nullable();
             $table->string('emergency_contacts')->nullable();
-            $table->string('doctor')->nullable();
+            $table->json('doctor')->nullable();
             $table->string('bloodtype')->nullable();
             $table->string('allergic_reactions')->nullable();
             $table->string('medicines')->nullable();
