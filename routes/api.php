@@ -58,6 +58,7 @@ Route::group(['prefix' => 'bike'], function () {
     Route::get('/{id}', 'BikeController@show');
     Route::put('/update/{id}', 'BikeController@update');
     Route::delete('/delete/{id}', 'BikeController@delete');
+    Route::get('/{id}/events', 'BikeController@events');
 });
 
 Route::group(['prefix' => 'plan'], function () {

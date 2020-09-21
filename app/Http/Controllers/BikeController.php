@@ -205,4 +205,26 @@ class BikeController extends Controller
             return response()->json('error', 1012);
         }
     }
+
+    public function events($id){
+        $data = $this->bike->events($id)
+            ->select(
+                'events.*',
+                'event_types.name as eventName', 
+                'event_types.key as eventKey',
+                'customers.name as customerName',
+                'data->userId as userId',
+                'data->bikeId as bikeId',
+                'users.name as userName',
+            )
+            ->join('event_types', 'events.eventType', '=', 'event_types.id')
+            ->leftJoin('customers', 'events.ownerId', '=', 'customers.id')
+            ->leftJoin('users', 'data->userId', '=', 'users.id')
+            ->join('bikes', 'data->bikeId', '=', 'bikes.id')
+            ->get();
+
+        
+        if (! $data) return response()->json('error', 404);
+        return response()->json($data);
+    }
 }

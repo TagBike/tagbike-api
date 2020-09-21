@@ -13,4 +13,8 @@ class Bike extends Model
     {
         return $this->belongsTo(User::class, 'id_user', 'id');
     }
+
+    public function events($id) {
+        return Event::where('data->bikeId', '=',$id);
+    }
 }
