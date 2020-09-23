@@ -30,7 +30,9 @@ class CustomerMedicalController extends Controller
 
     public function show($id){
         $customer_id = $id;
-        $medical = $this->medical->find(['customer_id' => $customer_id]);
+        $medical = $this->medical
+            ->where('customer_id', '=', $customer_id)
+            ->get();
         if (! $medical->count()) return response()->json('error', 404);
 
         return response()->json($medical);
