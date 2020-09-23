@@ -17,6 +17,7 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->integer('id_user');
             $table->string('name');
+            $table->integer('plan_id')->nullable();
             $table->string('cpf', 11);
             $table->string('rg', 20);
             $table->string('email')->unique();

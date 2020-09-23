@@ -36,7 +36,10 @@ class CustomerController extends Controller
 
     public function show($id){
 
-        $customer = $this->customer->find($id);
+        $customer = $this->customer
+            ->select('customers.*', 'plans.name as plan_name')
+            ->leftJoin('plans', 'plans.id', '=', 'customers.plan_id')
+            ->find($id);
         if (! $customer) return response()->json('error', 404);
 
         $data = ['data' => $customer];
@@ -46,6 +49,7 @@ class CustomerController extends Controller
     public function update(Request $request, $id) {
 
         $name = $request->input('name');
+        $plan_id = $request->input('plan_id');
         $cpf = $request->input('cpf');
         $rg = $request->input('rg');
         $email = $request->input('email');
@@ -70,6 +74,9 @@ class CustomerController extends Controller
 
             if(!empty($name)){
                 $customer->name = $name;
+            }
+            if(!empty($plan_id)){
+                $customer->plan_id = $plan_id;
             }
             if(!empty($cpf)){
                 $customer->cpf = $cpf;
@@ -138,6 +145,7 @@ class CustomerController extends Controller
     public function create(Request $request) {
 
         $name = $request->input('name');
+        $plan_id = $request->input('plan_id');
         $cpf = $request->input('cpf');
         $rg = $request->input('rg');
         $email = $request->input('email');
@@ -204,6 +212,7 @@ class CustomerController extends Controller
         $newCustomer = new Customer();
         $newCustomer->id_user = $idUser;
         $newCustomer->name = $name;
+        $newCustomer->plan_id = $plan_id;
         $newCustomer->cpf = $cpf;
         $newCustomer->rg = $rg;
         $newCustomer->email = $email;
@@ -230,7 +239,7 @@ class CustomerController extends Controller
                 'userId' => Auth::id(),
                 'customerId' => $newCustomer->id
             ])
-            ]);
+        ]);
 
 
         return response()->json("success", 202);
