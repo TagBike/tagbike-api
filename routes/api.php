@@ -99,6 +99,10 @@ Route::group(['prefix' => 'event'], function () {
     Route::delete('/delete/{id}', 'EventController@delete');
 });
 
+Route::group(['prefix' => 'export'], function () {
+    Route::get('/tag/{canvas}/{filetype}', 'ExportController@tag');
+});
+
 Route::group(['prefix' => 'reset-password'], function () {
     Route::post('/', 'ForgotPasswordController@emailRequest'); //Envia solicitação de reset se senha.
     Route::get('/{token}',      'ForgotPasswordController@find'); //Valida Token recebido no email.

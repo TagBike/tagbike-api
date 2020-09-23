@@ -8,6 +8,7 @@ use App\Bike;
 use App\User;
 use App\Customer;
 use App\Event;
+use App\Tag;
 
 class BikeController extends Controller
 {
@@ -36,7 +37,7 @@ class BikeController extends Controller
         $bike = $this->bike->find($id);
         if (! $bike) return response()->json('error', 404);
 
-        $data = ['data' => $bike];
+        $data = $bike;
         return response()->json($data);
     }
 
@@ -106,6 +107,8 @@ class BikeController extends Controller
                     'bikeId' => $newBike->id
                 ])
             ]);
+
+
 
             return response()->json("success", 202);
 
@@ -226,5 +229,14 @@ class BikeController extends Controller
         
         if (! $data) return response()->json('error', 404);
         return response()->json($data);
+    }
+
+    function randomKey($length) {
+        $pool = array_merge(range(0,9),range('A', 'Z'));
+    
+        for($i=0; $i < $length; $i++) {
+            $key .= $pool[mt_rand(0, count($pool) - 1)];
+        }
+        return $key;
     }
 }
