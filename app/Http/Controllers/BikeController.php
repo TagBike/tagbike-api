@@ -34,7 +34,10 @@ class BikeController extends Controller
 
     public function show($id){
 
-        $bike = $this->bike->find($id);
+        $bike = $this->bike
+            ->select('bikes.*', 'tags.hash as hash')
+            ->leftJoin('tags', 'tags.id_bike', '=', 'bikes.id')
+            ->find($id);
         if (! $bike) return response()->json('error', 404);
 
         $data = $bike;
@@ -96,6 +99,8 @@ class BikeController extends Controller
             $newBike->forkType = $forkType;
             $newBike->frametype = $frametype;
             $newBike->save();
+
+            Tag::register($newBike->id);
 
             Event::register([
                 'ownerId' => $customer_id,
@@ -229,14 +234,5 @@ class BikeController extends Controller
         
         if (! $data) return response()->json('error', 404);
         return response()->json($data);
-    }
-
-    function randomKey($length) {
-        $pool = array_merge(range(0,9),range('A', 'Z'));
-    
-        for($i=0; $i < $length; $i++) {
-            $key .= $pool[mt_rand(0, count($pool) - 1)];
-        }
-        return $key;
     }
 }
