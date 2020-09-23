@@ -15,10 +15,8 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->integer('id_bike');
-            $table->text('qr_code');
-            $table->string('qr_img');
+            $table->text('hash');
             $table->timestamps();
             $table->softDeletes();
         });
