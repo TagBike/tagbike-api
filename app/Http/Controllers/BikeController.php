@@ -28,7 +28,10 @@ class BikeController extends Controller
 
     public function index(){
         
-        $data = $this->bike->get();
+        $data = $this->bike
+            ->select('bikes.*', 'customers.name as customerName')
+            ->leftJoin('customers', 'customers.id', '=', 'bikes.customer_id')    
+            ->get();
         return response()->json($data);
     }
 
