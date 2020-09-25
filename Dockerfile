@@ -20,5 +20,5 @@ RUN php artisan key:generate \
     && php artisan config:cache
 
 
-CMD php artisan serve --host=0.0.0.0 --port=80 --env=$env
-EXPOSE 443 80
+CMD php artisan serve --host=0.0.0.0 --port=8000 --env=$env
+EXPOSE 8000
