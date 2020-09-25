@@ -62,6 +62,7 @@ class EventTypeSeeder extends Seeder
                 "event.action.sos.bike.wasstolen",
                 "event.action.user.customer.account.new",
                 "event.action.user.customer.account.update",
+                "event.action.user.customer.account.delete",
                 "event.action.user.customer.account.resetpassword",
                 "event.action.user.customer.bike.add",
                 "event.action.user.customer.bike.archive",
